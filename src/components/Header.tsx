@@ -1,7 +1,7 @@
-import Link from "next/link";
-import Image from "next/image";
-import { getCurrentAlumni } from "@/lib/auth";
 import { LogoutButton } from "@/components/LogoutButton";
+import { getCurrentAlumni } from "@/lib/auth";
+import Image from "next/image";
+import Link from "next/link";
 
 interface HeaderProps {
   showAuthSection?: boolean;
@@ -38,12 +38,14 @@ export async function Header({ showAuthSection = true }: HeaderProps) {
                 <LogoutButton />
               </>
             ) : (
-              <Link
-                href="/alumni/login"
-                className="text-sm text-[var(--muted)] hover:text-[var(--primary-500)] transition-colors"
-              >
-                Entrar como Mentor
-              </Link>
+              <>
+              {/*  <Link
+                 href="/alumni/login"
+                 className="text-sm text-[var(--muted)] hover:text-[var(--primary-500)] transition-colors"
+               >
+                 Entrar como Mentor
+               </Link> */}
+              </>
             )}
           </div>
         )}

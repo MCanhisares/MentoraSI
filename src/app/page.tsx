@@ -72,12 +72,12 @@ export default function Home() {
             >
               Agendar Mentoria
             </Link>
-            <Link
+            {/* <Link
               href="/alumni/login"
               className="px-8 py-4 rounded-xl text-lg font-semibold text-[var(--foreground)] border border-[var(--card-border)] hover:border-[var(--primary-500)] hover:bg-[var(--surface-2)] transition-all"
             >
               Ser um Mentor
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>
@@ -163,6 +163,102 @@ export default function Home() {
             </p>
           </div>
         </div>
+      </div>
+
+      {/* Mentorship Program Section */}
+      <div className="relative max-w-5xl mx-auto px-6 ">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-[var(--foreground)] mb-4">
+            Como o Programa de Mentoria Funciona
+          </h2>
+          <p className="text-xl text-[var(--muted)] max-w-3xl mx-auto leading-relaxed">
+            Nossos mentores estão aqui para ajudar você a navegar sua jornada profissional com 
+            orientação personalizada e insights sobre o mercado de tecnologia.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8 mb-16">
+          <div className="bg-[var(--card-bg)] p-8 rounded-2xl border border-[var(--card-border)] hover:border-[var(--primary-500)] transition-colors">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mb-6">
+              <svg
+                className="w-6 h-6 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4">
+              Planejamento de Carreira
+            </h3>
+            <p className="text-[var(--muted)] leading-relaxed">
+              Receba ajuda para definir seus objetivos profissionais, identificar suas forças e 
+              criar um plano de carreira alinhado com seus interesses e o mercado atual.
+            </p>
+          </div>
+
+          <div className="bg-[var(--card-bg)] p-8 rounded-2xl border border-[var(--card-border)] hover:border-[var(--primary-500)] transition-colors">
+            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mb-6">
+              <svg
+                className="w-6 h-6 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4">
+              Preparação para Entrevistas
+            </h3>
+            <p className="text-[var(--muted)] leading-relaxed">
+              Treine suas habilidades para entrevistas técnicas e comportamentais, 
+              receba feedback construtivo e aumente sua confiança para conquistar as melhores oportunidades.
+            </p>
+          </div>
+
+          <div className="bg-[var(--card-bg)] p-8 rounded-2xl border border-[var(--card-border)] hover:border-[var(--primary-500)] transition-colors">
+            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mb-6">
+              <svg
+                className="w-6 h-6 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4">
+              Mercado de Tecnologia
+            </h3>
+            <p className="text-[var(--muted)] leading-relaxed">
+              Entenda tendências atuais, salários praticados, tecnologias em alta e 
+              receba insights sobre como se destacar no competitivo mercado tech brasileiro.
+            </p>
+          </div>
+        </div>        
       </div>
 
       {/* Mentors Section */}
