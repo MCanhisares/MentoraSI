@@ -39,6 +39,22 @@ export function BookingCalendar() {
   const [isBooking, setIsBooking] = useState(false);
   const [bookingError, setBookingError] = useState("");
   const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [emailError, setEmailError] = useState("");
+
+  // Validate USP email domain
+  const isValidUspEmail = (email: string): boolean => {
+    return /@.+\.usp\.br$/i.test(email) || /@usp\.br$/i.test(email);
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+    if (newEmail && !isValidUspEmail(newEmail)) {
+      setEmailError("Use um e-mail institucional da USP (@usp.br, @alumni.usp.br, etc.)");
+    } else {
+      setEmailError("");
+    }
+  };
 
   useEffect(() => {
     fetchSlots();
@@ -86,6 +102,11 @@ export function BookingCalendar() {
   const handleBook = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedSlot || !email || !studentName) return;
+
+    if (!isValidUspEmail(email)) {
+      setEmailError("Use um e-mail institucional da USP (@usp.br, @alumni.usp.br, etc.)");
+      return;
+    }
 
     setIsBooking(true);
     setBookingError("");
@@ -151,9 +172,9 @@ export function BookingCalendar() {
   if (bookingSuccess) {
     return (
       <div className="bg-[var(--card-bg)] p-8 rounded-xl border border-[var(--card-border)] text-center">
-        <div className="w-16 h-16 bg-[var(--success-bg)] rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 bg-[var(--primary-500)]/20 rounded-full flex items-center justify-center mx-auto mb-4">
           <svg
-            className="w-8 h-8 text-[var(--success-text)]"
+            className="w-8 h-8 text-[var(--primary-500)]"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -162,19 +183,19 @@ export function BookingCalendar() {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M5 13l4 4L19 7"
+              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
             />
           </svg>
         </div>
         <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">
-          Sessão Agendada!
+          Verifique seu E-mail
         </h2>
         <p className="text-[var(--muted)] mb-6">
-          Verifique seu e-mail para detalhes de confirmação e o link da reunião.
+          Enviamos um link de verificação para seu e-mail USP. Clique no link para confirmar seu agendamento.
         </p>
         <button
           onClick={() => setBookingSuccess(false)}
-          className="text-primary-500 hover:text-primary-700"
+          className="text-[var(--primary-500)] hover:text-[var(--primary-600)] transition-colors"
         >
           Agendar outra sessão
         </button>
@@ -362,17 +383,22 @@ export function BookingCalendar() {
                   htmlFor="email"
                   className="block text-sm font-medium text-[var(--foreground)] mb-1"
                 >
-                  Seu E-mail <span className="text-[var(--error-text)]">*</span>
+                  Seu E-mail USP <span className="text-[var(--error-text)]">*</span>
                 </label>
                 <input
                   type="email"
                   id="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={handleEmailChange}
                   required
-                  placeholder="estudante@universidade.edu"
-                  className="w-full border border-[var(--card-border)] bg-[var(--surface-2)] rounded-lg px-4 py-2 text-[var(--foreground)] placeholder-[var(--muted)] focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  placeholder="seunome@usp.br"
+                  className={`w-full border bg-[var(--surface-2)] rounded-lg px-4 py-2 text-[var(--foreground)] placeholder-[var(--muted)] focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ${
+                    emailError ? "border-[var(--error-text)]" : "border-[var(--card-border)]"
+                  }`}
                 />
+                {emailError && (
+                  <p className="text-[var(--error-text)] text-sm mt-1">{emailError}</p>
+                )}
               </div>
             </div>
 
@@ -411,7 +437,7 @@ export function BookingCalendar() {
             </div>
 
             <p className="text-xs text-[var(--muted)]">
-              Você receberá um e-mail de confirmação com o link da reunião e opções para reagendar ou cancelar.
+              Você receberá um e-mail de verificação. Clique no link para confirmar seu agendamento.
             </p>
 
             <div className="flex gap-3">
@@ -424,10 +450,10 @@ export function BookingCalendar() {
                </button>
                <button
                  type="submit"
-                 disabled={isBooking}
+                 disabled={isBooking || !!emailError}
                  className="flex-1 bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                >
-                 {isBooking ? "Agendando..." : "Confirmar Agendamento"}
+                 {isBooking ? "Verificando..." : "Confirmar Agendamento"}
               </button>
             </div>
           </form>

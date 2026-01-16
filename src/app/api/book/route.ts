@@ -1,23 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { createCalendarEvent } from "@/lib/google";
-import {
-  sendBookingConfirmationToStudent,
-  sendBookingNotificationToAlumni,
-} from "@/lib/email";
+import { sendVerificationEmail } from "@/lib/email";
 import { format, parseISO, getDay } from "date-fns";
 import { randomUUID } from "crypto";
-
-interface AlumniRow {
-  id: string;
-  email: string;
-  name: string;
-  google_refresh_token: string | null;
-}
 
 interface SessionRow {
   id: string;
   management_token: string | null;
+  verification_token: string | null;
+}
+
+// Validate USP email domain
+function isValidUspEmail(email: string): boolean {
+  return /@.+\.usp\.br$/i.test(email) || /@usp\.br$/i.test(email);
 }
 
 interface AvailabilitySlotRow {
@@ -47,6 +42,14 @@ export async function POST(request: NextRequest) {
     if (!booking_key || !date || !start_time || !end_time || !student_email || !student_name) {
       return NextResponse.json(
         { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // Validate USP email domain
+    if (!isValidUspEmail(student_email)) {
+      return NextResponse.json(
+        { error: "Use um e-mail institucional da USP (@usp.br, @alumni.usp.br, etc.)" },
         { status: 400 }
       );
     }
@@ -137,24 +140,11 @@ export async function POST(request: NextRequest) {
     // Pick a random available alumni (for fair distribution)
     const selectedSlot = availableSlots[Math.floor(Math.random() * availableSlots.length)];
 
-    // Get alumni info for calendar event
-    const { data: alumni } = await supabase
-      .from("alumni")
-      .select("*")
-      .eq("id", selectedSlot.alumni_id)
-      .single() as { data: AlumniRow | null };
-
-    if (!alumni) {
-      return NextResponse.json(
-        { error: "Alumni not found" },
-        { status: 404 }
-      );
-    }
-
-    // Generate management token for cancel/reschedule links
+    // Generate tokens
     const managementToken = randomUUID();
+    const verificationToken = randomUUID();
 
-    // Create the session record FIRST (without calendar info)
+    // Create the session record with 'pending' status (awaiting email verification)
     const { data: session, error: sessionError } = await supabase
       .from("sessions")
       .insert({
@@ -168,7 +158,8 @@ export async function POST(request: NextRequest) {
         start_time: normalizedStartTime,
         end_time: normalizedEndTime,
         management_token: managementToken,
-        status: "confirmed",
+        verification_token: verificationToken,
+        status: "pending",
       } as Record<string, unknown>)
       .select()
       .single() as { data: SessionRow | null; error: unknown };
@@ -181,112 +172,34 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get base URL for management links
+    // Get base URL for verification link
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ||
       (request.headers.get("host")?.includes("localhost")
         ? `http://${request.headers.get("host")}`
         : `https://${request.headers.get("host")}`);
 
-    const rescheduleLink = `${baseUrl}/session/${session?.id}/reschedule?token=${managementToken}`;
-    const cancelLink = `${baseUrl}/session/${session?.id}/cancel?token=${managementToken}`;
-
-    let googleEventId: string | null = null;
-    let meetingLink: string | null = null;
-
-    // Create Google Calendar event if alumni has connected their calendar
-    if (alumni.google_refresh_token) {
-      try {
-        const description = [
-          `Sessão de mentoria com ${student_name}`,
-          ``,
-          `E-mail: ${student_email}`,
-          student_linkedin ? `LinkedIn: ${student_linkedin}` : null,
-          student_notes ? `\nNotas do estudante:\n${student_notes}` : null,
-          ``,
-          `─────────────────────────`,
-          `Gerenciar sessão:`,
-          `• Reagendar: ${rescheduleLink}`,
-          `• Cancelar: ${cancelLink}`,
-        ].filter(Boolean).join("\n");
-
-        const calendarResult = await createCalendarEvent(
-          alumni.google_refresh_token,
-          {
-            summary: `MentoraSI - Mentoria com ${student_name}`,
-            description,
-            startDateTime: `${date}T${normalizedStartTime}`,
-            endDateTime: `${date}T${normalizedEndTime}`,
-            attendeeEmail: student_email,
-          }
-        );
-
-        googleEventId = calendarResult.eventId || null;
-        meetingLink = calendarResult.meetingLink || null;
-        console.log("Calendar event created successfully:", { googleEventId, meetingLink });
-
-        // Update session with calendar info
-        await supabase
-          .from("sessions")
-          .update({
-            google_event_id: googleEventId,
-            meeting_link: meetingLink,
-          })
-          .eq("id", session?.id);
-
-      } catch (calendarError) {
-        console.error("Failed to create calendar event:", calendarError);
-        if (calendarError instanceof Error) {
-          console.error("Error message:", calendarError.message);
-          console.error("Error stack:", calendarError.stack);
-        }
-        // Continue without calendar event - not a critical failure
-      }
-    } else {
-      console.log("Alumni does not have a refresh token, skipping calendar event creation");
-    }
-
-    // Send email notifications
+    // Send verification email (NOT confirmation - that comes after verification)
     const formattedDate = format(parseISO(date), "EEEE, MMMM d, yyyy");
 
     try {
-      await sendBookingConfirmationToStudent(student_email, {
+      await sendVerificationEmail(student_email, {
         studentName: student_name,
         date: formattedDate,
         startTime: normalizedStartTime.slice(0, 5),
         endTime: normalizedEndTime.slice(0, 5),
-        meetingLink,
-        sessionId: session?.id || "",
-        managementToken: managementToken,
+        verificationToken,
         baseUrl,
       });
-      console.log("Student confirmation email sent successfully");
+      console.log("Verification email sent successfully");
     } catch (emailError) {
-      console.error("Failed to send student email:", emailError);
-    }
-
-    try {
-      await sendBookingNotificationToAlumni(alumni.email, {
-        date: formattedDate,
-        startTime: normalizedStartTime.slice(0, 5),
-        endTime: normalizedEndTime.slice(0, 5),
-        studentEmail: student_email,
-        studentName: student_name,
-        studentLinkedin: student_linkedin || null,
-        studentNotes: student_notes || null,
-        meetingLink,
-        sessionId: session?.id || "",
-        managementToken,
-        baseUrl,
-      });
-      console.log("Alumni notification email sent successfully");
-    } catch (emailError) {
-      console.error("Failed to send alumni email:", emailError);
+      console.error("Failed to send verification email:", emailError);
+      // Don't fail the request - the session is created, user can request another email
     }
 
     return NextResponse.json({
       success: true,
       session_id: session?.id,
-      meeting_link: meetingLink,
+      pending_verification: true,
     });
   } catch (error) {
     console.error("Booking error:", error);

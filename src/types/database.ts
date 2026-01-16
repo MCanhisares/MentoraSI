@@ -88,6 +88,7 @@ export interface Database {
           google_event_id: string | null;
           meeting_link: string | null;
           management_token: string | null;
+          verification_token: string | null;
           status: "pending" | "confirmed" | "cancelled" | "completed";
           cancelled_at: string | null;
           cancellation_reason: string | null;
@@ -107,6 +108,7 @@ export interface Database {
           google_event_id?: string | null;
           meeting_link?: string | null;
           management_token?: string | null;
+          verification_token?: string | null;
           status?: "pending" | "confirmed" | "cancelled" | "completed";
           cancelled_at?: string | null;
           cancellation_reason?: string | null;
@@ -126,6 +128,7 @@ export interface Database {
           google_event_id?: string | null;
           meeting_link?: string | null;
           management_token?: string | null;
+          verification_token?: string | null;
           status?: "pending" | "confirmed" | "cancelled" | "completed";
           cancelled_at?: string | null;
           cancellation_reason?: string | null;

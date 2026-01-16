@@ -44,7 +44,8 @@ CREATE TABLE sessions (
   google_event_id TEXT,
   meeting_link TEXT,
   management_token TEXT UNIQUE,
-  status TEXT DEFAULT 'confirmed' CHECK (status IN ('pending', 'confirmed', 'cancelled', 'completed')),
+  verification_token TEXT UNIQUE,
+  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'confirmed', 'cancelled', 'completed')),
   cancelled_at TIMESTAMPTZ,
   cancellation_reason TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
@@ -148,3 +149,7 @@ WHERE a.is_recurring = true
 --
 -- CREATE POLICY "Public can update sessions" ON sessions
 --   FOR UPDATE USING (true);
+--
+-- Email verification migration:
+-- ALTER TABLE sessions ADD COLUMN verification_token TEXT UNIQUE;
+-- CREATE INDEX idx_sessions_verification_token ON sessions(verification_token);

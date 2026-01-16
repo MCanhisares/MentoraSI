@@ -1,6 +1,6 @@
-import Link from "next/link";
-import Image from "next/image";
 import { Header } from "@/components/Header";
+import Image from "next/image";
+import Link from "next/link";
 
 const mentors = [
   {
@@ -52,7 +52,7 @@ export default function Home() {
         <div className="text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-[var(--muted)] mb-8">
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            Mentoria de carreira com ex-alunos EACH USP
+            Mentoria de carreira com ex-alunos USP
           </div>
 
           <h1 className="text-5xl md:text-7xl font-bold text-[var(--foreground)] mb-6 leading-tight">
@@ -61,7 +61,7 @@ export default function Home() {
           </h1>
 
           <p className="text-xl text-[var(--muted)] max-w-2xl mx-auto mb-12 leading-relaxed">
-            Receba orientação profissional de ex-alunos da EACH USP que já trilharam o caminho.
+            Receba orientação profissional de ex-alunos da USP que estão no mercado de trabalho.
             Agende sessões e acelere sua carreira.
           </p>
 
@@ -108,7 +108,7 @@ export default function Home() {
               </svg>
             </div>
             <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">
-              Ex-Alunos EACH USP
+              Ex-Alunos USP
             </h3>
             <p className="text-[var(--muted)] text-sm leading-relaxed">
               Mentores que estudaram na mesma universidade e entendem sua jornada.
@@ -156,7 +156,7 @@ export default function Home() {
               </svg>
             </div>
             <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">
-              100% Gratuito para alunos EACH
+              100% Gratuito para alunos USP
             </h3>
             <p className="text-[var(--muted)] text-sm leading-relaxed">
               Aproveite sessões de mentoria sem custo algum durante sua jornada acadêmica.
@@ -172,7 +172,7 @@ export default function Home() {
             Conheça os Mentores
           </h2>
           <p className="text-[var(--muted)]">
-            Ex-Alunos da EACH USP prontos para ajudar você a crescer profissionalmente.
+            Ex-Alunos da USP prontos para ajudar você a crescer profissionalmente.
           </p>
         </div>
 

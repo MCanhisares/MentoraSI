@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 
 // Resend requires a verified domain. Use their test domain for development.
-const DEFAULT_FROM = "MentoraSI <onboarding@resend.dev>";
+const DEFAULT_FROM = "MentoraSI <noreply@notifications.mentorasi.com.br>";
 
 function getResendClient() {
   if (!process.env.RESEND_API_KEY) {
@@ -18,6 +18,61 @@ function getFromAddress(): string {
     return from;
   }
   return DEFAULT_FROM;
+}
+
+export async function sendVerificationEmail(
+  studentEmail: string,
+  sessionDetails: {
+    studentName: string;
+    date: string;
+    startTime: string;
+    endTime: string;
+    verificationToken: string;
+    baseUrl: string;
+  }
+) {
+  const resend = getResendClient();
+  if (!resend) return;
+
+  const { studentName, date, startTime, endTime, verificationToken, baseUrl } = sessionDetails;
+
+  const verificationLink = `${baseUrl}/book/verify?token=${verificationToken}`;
+
+  const result = await resend.emails.send({
+    from: getFromAddress(),
+    to: studentEmail,
+    subject: "Confirme seu Agendamento - MentoraSI",
+    html: `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #0D0711; color: #F5F3F7; padding: 32px; border-radius: 12px;">
+        <h1 style="color: #A855F7; margin-bottom: 24px;">Confirme seu Agendamento</h1>
+        <p style="margin-bottom: 16px;">Olá ${studentName},</p>
+        <p style="margin-bottom: 24px;">Clique no botão abaixo para confirmar sua sessão de mentoria.</p>
+
+        <div style="background: #1A1221; padding: 24px; border-radius: 8px; margin: 24px 0; border: 1px solid #2D2438;">
+          <p style="margin: 8px 0;"><strong>Data:</strong> ${date}</p>
+          <p style="margin: 8px 0;"><strong>Horário:</strong> ${startTime} - ${endTime}</p>
+        </div>
+
+        <div style="text-align: center; margin: 32px 0;">
+          <a href="${verificationLink}" style="display: inline-block; background: linear-gradient(135deg, #A855F7, #6366F1); color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600;">Confirmar Agendamento</a>
+        </div>
+
+        <p style="color: #9D8BA8; font-size: 14px; margin-top: 32px;">
+          Se você não solicitou este agendamento, ignore este e-mail.
+        </p>
+        <p style="color: #9D8BA8; font-size: 12px; margin-top: 16px;">
+          Ou copie e cole este link no seu navegador:<br/>
+          <span style="color: #A855F7;">${verificationLink}</span>
+        </p>
+      </div>
+    `,
+  });
+
+  if (result.error) {
+    console.error("Resend error (verification email):", result.error);
+    throw new Error(result.error.message);
+  }
+  console.log("Verification email sent:", result.data?.id);
 }
 
 export async function sendBookingConfirmationToStudent(

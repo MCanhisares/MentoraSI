@@ -15,7 +15,7 @@ export default function BookPage() {
             Agendar Mentoria
           </h1>
           <p className="text-[var(--muted)] max-w-lg mx-auto">
-            Escolha um horário disponível. Você será conectado com um mentor ex-aluno de Sistemas de Informação.
+            Escolha um horário disponível. Você será conectado com um mentor ex-aluno USP.
           </p>
         </div>
 

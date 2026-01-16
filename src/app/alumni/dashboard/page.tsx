@@ -111,7 +111,7 @@ export default async function AlumniDashboardPage() {
 
         <div className="grid lg:grid-cols-5 gap-6">
           {/* Quick Actions */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 flex flex-col gap-4">
             <div className="glass p-6 rounded-2xl">
               <h2 className="text-lg font-semibold text-[var(--foreground)] mb-4">
                 Ações Rápidas
@@ -122,6 +122,20 @@ export default async function AlumniDashboardPage() {
               >
                 Definir Disponibilidade
               </Link>
+            </div>
+
+            <div className="glass p-6 rounded-2xl">
+              <h2 className="text-lg font-semibold text-[var(--foreground)] mb-4">
+                Recursos para Mentores
+              </h2>
+              <a
+                href="https://mentorasi.notion.site/2926f9fd18324aad99fec4982d4dd564?v=2eaf9d830f0780079579000c8d9ee0b5"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="gradient-btn block w-full text-white text-center px-4 py-3 rounded-xl font-medium"
+              >
+                Acessar Wiki
+              </a>
             </div>
           </div>
 
