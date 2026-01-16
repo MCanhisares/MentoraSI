@@ -8,26 +8,41 @@ interface AlumniRecord {
 
 const SESSION_COOKIE_NAME = "alumni_session";
 
+function getBaseUrl(request: NextRequest): string {
+  // Use the host header to determine the base URL
+  const host = request.headers.get("host");
+  const protocol = request.headers.get("x-forwarded-proto") || "https";
+
+  if (host) {
+    return `${protocol}://${host}`;
+  }
+
+  // Fallback to request.url
+  const url = new URL(request.url);
+  return url.origin;
+}
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const code = searchParams.get("code");
   const error = searchParams.get("error");
+  const baseUrl = getBaseUrl(request);
+
+  console.log("OAuth callback - baseUrl:", baseUrl);
+  console.log("OAuth callback - request.url:", request.url);
 
   if (error) {
-    return NextResponse.redirect(
-      new URL("/alumni/login?error=access_denied", request.url)
-    );
+    return NextResponse.redirect(new URL("/alumni/login?error=access_denied", baseUrl));
   }
 
   if (!code) {
-    return NextResponse.redirect(
-      new URL("/alumni/login?error=no_code", request.url)
-    );
+    return NextResponse.redirect(new URL("/alumni/login?error=no_code", baseUrl));
   }
 
   try {
     // Exchange code for tokens
     const tokens = await getTokensFromCode(code);
+    console.log("OAuth callback - tokens received, has refresh_token:", !!tokens.refresh_token);
 
     if (!tokens.access_token) {
       throw new Error("No access token received");
@@ -35,6 +50,7 @@ export async function GET(request: NextRequest) {
 
     // Get user info from Google
     const userInfo = await getUserInfo(tokens.access_token);
+    console.log("OAuth callback - user email:", userInfo.email);
 
     // Get Supabase client
     const supabase = await createClient();
@@ -67,6 +83,7 @@ export async function GET(request: NextRequest) {
         .eq("id", existingAlumni.id);
 
       alumniId = existingAlumni.id;
+      console.log("OAuth callback - updated existing alumni:", alumniId);
     } else {
       // Create new alumni with a generated UUID
       const newId = crypto.randomUUID();
@@ -85,27 +102,29 @@ export async function GET(request: NextRequest) {
       }
 
       alumniId = newId;
+      console.log("OAuth callback - created new alumni:", alumniId);
     }
 
     // Create redirect response with session cookie
-    const response = NextResponse.redirect(
-      new URL("/alumni/dashboard", request.url)
-    );
+    const redirectUrl = new URL("/alumni/dashboard", baseUrl);
+    console.log("OAuth callback - redirecting to:", redirectUrl.toString());
 
-    // Set the session cookie on the response
-    response.cookies.set(SESSION_COOKIE_NAME, alumniId, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      path: "/",
+    // Build the Set-Cookie header manually for better compatibility
+    const maxAge = 60 * 60 * 24 * 7; // 7 days
+    const cookieValue = `${SESSION_COOKIE_NAME}=${alumniId}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`;
+
+    console.log("OAuth callback - setting cookie header");
+
+    // Use Response with explicit headers for better Vercel compatibility
+    return new Response(null, {
+      status: 302,
+      headers: {
+        Location: redirectUrl.toString(),
+        "Set-Cookie": cookieValue,
+      },
     });
-
-    return response;
   } catch (error) {
     console.error("OAuth callback error:", error);
-    return NextResponse.redirect(
-      new URL("/alumni/login?error=auth_failed", request.url)
-    );
+    return NextResponse.redirect(new URL("/alumni/login?error=auth_failed", baseUrl));
   }
 }
