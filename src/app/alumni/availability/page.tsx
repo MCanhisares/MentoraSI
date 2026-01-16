@@ -2,21 +2,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
-import { AvailabilityForm } from "@/components/AvailabilityForm";
 import { LogoutButton } from "@/components/LogoutButton";
+import { AvailabilityPageContent } from "@/components/AvailabilityPageContent";
 import type { Alumni, AvailabilitySlot } from "@/types/database";
 
 const SESSION_COOKIE_NAME = "alumni_session";
-
-const DAYS_OF_WEEK = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
 
 export default async function AvailabilityPage() {
   const cookieStore = await cookies();
@@ -40,12 +30,14 @@ export default async function AvailabilityPage() {
     redirect("/alumni/login");
   }
 
-  // Get existing availability slots
+  // Get existing availability slots - order by specific_date for individual, then day_of_week for recurring
   const { data: slots } = await supabase
     .from("availability_slots")
     .select("*")
     .eq("alumni_id", alumniId)
-    .order("day_of_week", { ascending: true }) as { data: AvailabilitySlot[] | null };
+    .order("is_recurring", { ascending: false })
+    .order("day_of_week", { ascending: true })
+    .order("specific_date", { ascending: true }) as { data: AvailabilitySlot[] | null };
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -73,56 +65,12 @@ export default async function AvailabilityPage() {
             Set Your Availability
           </h1>
           <p className="text-gray-600">
-            Define when you are available for mentoring sessions. Students will be
-            able to book during these times.
+            Define when you are available for mentoring sessions. Use the Weekly Schedule
+            for recurring availability or Individual Dates for specific one-time slots.
           </p>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Add Availability
-          </h2>
-          <AvailabilityForm alumniId={alumniId} />
-        </div>
-
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Current Availability
-          </h2>
-
-          {slots && slots.length > 0 ? (
-            <div className="space-y-3">
-              {slots.map((slot) => (
-                <div
-                  key={slot.id}
-                  className="flex justify-between items-center p-4 bg-gray-50 rounded-lg"
-                >
-                  <div>
-                    <p className="font-medium text-gray-900">
-                      {DAYS_OF_WEEK[slot.day_of_week]}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      {slot.start_time.slice(0, 5)} - {slot.end_time.slice(0, 5)}
-                    </p>
-                  </div>
-                  <form action={`/api/availability?id=${slot.id}`} method="POST">
-                    <input type="hidden" name="_method" value="DELETE" />
-                    <button
-                      type="submit"
-                      className="text-red-600 hover:text-red-800 text-sm"
-                    >
-                      Remove
-                    </button>
-                  </form>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-gray-500">
-              No availability set yet. Add your first time slot above.
-            </p>
-          )}
-        </div>
+        <AvailabilityPageContent alumniId={alumniId} slots={slots} />
       </div>
     </main>
   );

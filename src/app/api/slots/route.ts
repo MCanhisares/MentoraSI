@@ -41,15 +41,15 @@ export async function GET() {
     return NextResponse.json({ error: "Failed to fetch slots" }, { status: 500 });
   }
 
-  // Get booked sessions for the next 14 days
+  // Get booked sessions for the next 90 days (3 months)
   const today = format(new Date(), "yyyy-MM-dd");
-  const twoWeeksLater = format(addDays(new Date(), 14), "yyyy-MM-dd");
+  const threeMonthsLater = format(addDays(new Date(), 90), "yyyy-MM-dd");
 
   const { data: bookedSessions } = await supabase
     .from("sessions")
     .select("slot_id, session_date, start_time, alumni_id")
     .gte("session_date", today)
-    .lte("session_date", twoWeeksLater)
+    .lte("session_date", threeMonthsLater)
     .in("status", ["pending", "confirmed"]) as { data: BookedSessionRow[] | null };
 
   // Create a set of booked slot+date combinations
@@ -59,10 +59,11 @@ export async function GET() {
     ) || []
   );
 
-  // Generate concrete slots for the next 14 days
+  // Generate concrete slots for the next 90 days (3 months)
+  // This allows for both recurring weekly slots and individual date slots
   const generatedSlots: GeneratedSlot[] = [];
 
-  for (let i = 0; i < 14; i++) {
+  for (let i = 0; i < 90; i++) {
     const date = addDays(startOfDay(new Date()), i);
     const dayOfWeek = getDay(date);
     const dateStr = format(date, "yyyy-MM-dd");
