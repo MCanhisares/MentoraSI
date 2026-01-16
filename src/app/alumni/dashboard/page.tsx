@@ -1,34 +1,41 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { format } from "date-fns";
 import { LogoutButton } from "@/components/LogoutButton";
 import type { Alumni, Session } from "@/types/database";
 
+const SESSION_COOKIE_NAME = "alumni_session";
+
 export default async function AlumniDashboardPage() {
-  const supabase = await createClient();
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME);
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  if (!sessionCookie?.value) {
     redirect("/alumni/login");
   }
+
+  const alumniId = sessionCookie.value;
+  const supabase = await createClient();
 
   // Get alumni data
   const { data: alumni } = await supabase
     .from("alumni")
     .select("*")
-    .eq("id", user.id)
+    .eq("id", alumniId)
     .single() as { data: Alumni | null };
+
+  if (!alumni) {
+    redirect("/alumni/login");
+  }
 
   // Get upcoming sessions
   const today = format(new Date(), "yyyy-MM-dd");
   const { data: sessions } = await supabase
     .from("sessions")
     .select("*")
-    .eq("alumni_id", user.id)
+    .eq("alumni_id", alumniId)
     .gte("session_date", today)
     .eq("status", "confirmed")
     .order("session_date", { ascending: true })
@@ -38,7 +45,7 @@ export default async function AlumniDashboardPage() {
   const { count: slotsCount } = await supabase
     .from("availability_slots")
     .select("*", { count: "exact", head: true })
-    .eq("alumni_id", user.id);
+    .eq("alumni_id", alumniId);
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -48,7 +55,7 @@ export default async function AlumniDashboardPage() {
             MentorMatch
           </Link>
           <div className="flex items-center gap-4">
-            <span className="text-gray-600">{alumni?.name || user.email}</span>
+            <span className="text-gray-600">{alumni.name || alumni.email}</span>
             <LogoutButton />
           </div>
         </div>
@@ -85,7 +92,7 @@ export default async function AlumniDashboardPage() {
               Calendar Status
             </h3>
             <p className="text-lg font-medium text-green-600">
-              {alumni?.google_refresh_token ? "Connected" : "Not Connected"}
+              {alumni.google_refresh_token ? "Connected" : "Not Connected"}
             </p>
           </div>
         </div>

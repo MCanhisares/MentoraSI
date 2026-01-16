@@ -1,20 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
+
+const SESSION_COOKIE_NAME = "alumni_session";
 
 interface SlotOwnership {
   alumni_id: string;
 }
 
 export async function POST(request: NextRequest) {
-  const supabase = await createClient();
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME);
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  if (!sessionCookie?.value) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  const alumniId = sessionCookie.value;
+  const supabase = await createClient();
 
   const formData = await request.formData();
   const method = formData.get("_method");
@@ -33,7 +36,7 @@ export async function POST(request: NextRequest) {
       .eq("id", slotId)
       .single() as { data: SlotOwnership | null };
 
-    if (!slot || slot.alumni_id !== user.id) {
+    if (!slot || slot.alumni_id !== alumniId) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
@@ -48,15 +51,15 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const supabase = await createClient();
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME);
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  if (!sessionCookie?.value) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  const alumniId = sessionCookie.value;
+  const supabase = await createClient();
 
   const slotId = request.nextUrl.searchParams.get("id");
 
@@ -71,7 +74,7 @@ export async function DELETE(request: NextRequest) {
     .eq("id", slotId)
     .single() as { data: SlotOwnership | null };
 
-  if (!slot || slot.alumni_id !== user.id) {
+  if (!slot || slot.alumni_id !== alumniId) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 

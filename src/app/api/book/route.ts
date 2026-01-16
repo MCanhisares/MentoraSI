@@ -94,26 +94,35 @@ export async function POST(request: NextRequest) {
     // Create Google Calendar event if alumni has connected their calendar
     if (alumni.google_refresh_token) {
       try {
-        const startDateTime = `${date}T${start_time}:00`;
-        const endDateTime = `${date}T${end_time}:00`;
+        // Ensure time format is HH:MM:SS (pad if needed)
+        const formattedStartTime = start_time.length === 5 ? `${start_time}:00` : start_time;
+        const formattedEndTime = end_time.length === 5 ? `${end_time}:00` : end_time;
 
         const calendarResult = await createCalendarEvent(
           alumni.google_refresh_token,
           {
             summary: "MentorMatch - Mentoring Session",
             description: `Anonymous mentoring session with a student.\n\nStudent email: ${student_email}`,
-            startDateTime,
-            endDateTime,
+            startDateTime: `${date}T${formattedStartTime}`,
+            endDateTime: `${date}T${formattedEndTime}`,
             attendeeEmail: student_email,
           }
         );
 
         googleEventId = calendarResult.eventId || null;
         meetingLink = calendarResult.meetingLink || null;
+        console.log("Calendar event created successfully:", { googleEventId, meetingLink });
       } catch (calendarError) {
         console.error("Failed to create calendar event:", calendarError);
+        // Log more details for debugging
+        if (calendarError instanceof Error) {
+          console.error("Error message:", calendarError.message);
+          console.error("Error stack:", calendarError.stack);
+        }
         // Continue without calendar event - not a critical failure
       }
+    } else {
+      console.log("Alumni does not have a refresh token, skipping calendar event creation");
     }
 
     // Create the session record

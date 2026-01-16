@@ -58,27 +58,41 @@ export async function createCalendarEvent(
   const oauth2Client = getOAuth2Client();
   oauth2Client.setCredentials({ refresh_token: refreshToken });
 
+  // Force a token refresh to ensure we have a valid access token
+  try {
+    const { credentials } = await oauth2Client.refreshAccessToken();
+    oauth2Client.setCredentials(credentials);
+  } catch (refreshError) {
+    console.error("Failed to refresh access token:", refreshError);
+    throw new Error("Failed to refresh Google access token. The user may need to re-authenticate.");
+  }
+
   const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+
+  // Use America/Sao_Paulo as default timezone for Brazil
+  const timeZone = eventDetails.timeZone || "America/Sao_Paulo";
 
   const event = {
     summary: eventDetails.summary,
     description: eventDetails.description,
     start: {
       dateTime: eventDetails.startDateTime,
-      timeZone: eventDetails.timeZone || "UTC",
+      timeZone: timeZone,
     },
     end: {
       dateTime: eventDetails.endDateTime,
-      timeZone: eventDetails.timeZone || "UTC",
+      timeZone: timeZone,
     },
     attendees: [{ email: eventDetails.attendeeEmail }],
     conferenceData: {
       createRequest: {
-        requestId: `mentormatch-${Date.now()}`,
+        requestId: `mentormatch-${Date.now()}-${Math.random().toString(36).substring(7)}`,
         conferenceSolutionKey: { type: "hangoutsMeet" },
       },
     },
   };
+
+  console.log("Creating calendar event with:", JSON.stringify(event, null, 2));
 
   const response = await calendar.events.insert({
     calendarId: "primary",
@@ -86,6 +100,8 @@ export async function createCalendarEvent(
     conferenceDataVersion: 1,
     sendUpdates: "all",
   });
+
+  console.log("Calendar event created:", response.data.id);
 
   return {
     eventId: response.data.id,

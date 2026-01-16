@@ -1,9 +1,12 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { AvailabilityForm } from "@/components/AvailabilityForm";
 import { LogoutButton } from "@/components/LogoutButton";
 import type { Alumni, AvailabilitySlot } from "@/types/database";
+
+const SESSION_COOKIE_NAME = "alumni_session";
 
 const DAYS_OF_WEEK = [
   "Sunday",
@@ -16,28 +19,32 @@ const DAYS_OF_WEEK = [
 ];
 
 export default async function AvailabilityPage() {
-  const supabase = await createClient();
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME);
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  if (!sessionCookie?.value) {
     redirect("/alumni/login");
   }
+
+  const alumniId = sessionCookie.value;
+  const supabase = await createClient();
 
   // Get alumni data
   const { data: alumni } = await supabase
     .from("alumni")
     .select("*")
-    .eq("id", user.id)
+    .eq("id", alumniId)
     .single() as { data: Alumni | null };
+
+  if (!alumni) {
+    redirect("/alumni/login");
+  }
 
   // Get existing availability slots
   const { data: slots } = await supabase
     .from("availability_slots")
     .select("*")
-    .eq("alumni_id", user.id)
+    .eq("alumni_id", alumniId)
     .order("day_of_week", { ascending: true }) as { data: AvailabilitySlot[] | null };
 
   return (
@@ -54,7 +61,7 @@ export default async function AvailabilityPage() {
             >
               Dashboard
             </Link>
-            <span className="text-gray-600">{alumni?.name || user.email}</span>
+            <span className="text-gray-600">{alumni.name || alumni.email}</span>
             <LogoutButton />
           </div>
         </div>
@@ -75,7 +82,7 @@ export default async function AvailabilityPage() {
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
             Add Availability
           </h2>
-          <AvailabilityForm alumniId={user.id} />
+          <AvailabilityForm alumniId={alumniId} />
         </div>
 
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">

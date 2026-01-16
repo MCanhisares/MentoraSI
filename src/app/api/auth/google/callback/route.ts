@@ -6,6 +6,8 @@ interface AlumniRecord {
   id: string;
 }
 
+const SESSION_COOKIE_NAME = "alumni_session";
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const code = searchParams.get("code");
@@ -44,46 +46,62 @@ export async function GET(request: NextRequest) {
       .eq("email", userInfo.email)
       .single() as { data: AlumniRecord | null };
 
+    let alumniId: string;
+
     if (existingAlumni) {
       // Update existing alumni with new tokens
-      await supabase
-        .from("alumni")
-        .update({
-          google_access_token: tokens.access_token,
-          google_refresh_token: tokens.refresh_token || null,
-          name: userInfo.name,
-        } as Record<string, unknown>)
-        .eq("id", existingAlumni.id);
+      // Only update refresh_token if a new one was provided (Google only sends it on first auth)
+      const updateData: Record<string, unknown> = {
+        google_access_token: tokens.access_token,
+        name: userInfo.name,
+      };
 
-      // Sign in with Supabase Auth (create session)
-      await supabase.auth.signInWithPassword({
-        email: userInfo.email,
-        password: existingAlumni.id, // Use ID as password for simplicity
-      });
-    } else {
-      // Create new alumni
-      // First create auth user
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: userInfo.email,
-        password: crypto.randomUUID(), // Random password - we use Google for auth
-      });
-
-      if (authError) {
-        throw authError;
+      // Only update refresh token if Google provided a new one
+      if (tokens.refresh_token) {
+        updateData.google_refresh_token = tokens.refresh_token;
       }
 
-      // Insert alumni record
-      await supabase.from("alumni").insert({
-        id: authData.user?.id,
+      await supabase
+        .from("alumni")
+        .update(updateData)
+        .eq("id", existingAlumni.id);
+
+      alumniId = existingAlumni.id;
+    } else {
+      // Create new alumni with a generated UUID
+      const newId = crypto.randomUUID();
+
+      const { error: insertError } = await supabase.from("alumni").insert({
+        id: newId,
         email: userInfo.email,
         name: userInfo.name,
         google_access_token: tokens.access_token,
         google_refresh_token: tokens.refresh_token,
       } as Record<string, unknown>);
+
+      if (insertError) {
+        console.error("Failed to create alumni:", insertError);
+        throw insertError;
+      }
+
+      alumniId = newId;
     }
 
-    // Redirect to dashboard
-    return NextResponse.redirect(new URL("/alumni/dashboard", request.url));
+    // Create redirect response with session cookie
+    const response = NextResponse.redirect(
+      new URL("/alumni/dashboard", request.url)
+    );
+
+    // Set the session cookie on the response
+    response.cookies.set(SESSION_COOKIE_NAME, alumniId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: "/",
+    });
+
+    return response;
   } catch (error) {
     console.error("OAuth callback error:", error);
     return NextResponse.redirect(
