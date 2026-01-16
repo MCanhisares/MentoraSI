@@ -47,7 +47,15 @@ export default function AlumniLoginPage() {
           </a>
 
           <p className="text-xs text-gray-500 text-center mt-6">
-            By signing in, you agree to connect your Google Calendar for automatic session scheduling.
+            By signing in, you agree to our{" "}
+            <Link href="/terms" className="text-primary-600 hover:text-primary-800">
+              Terms of Service
+            </Link>{" "}
+            and{" "}
+            <Link href="/privacy" className="text-primary-600 hover:text-primary-800">
+              Privacy Policy
+            </Link>
+            , and to connect your Google Calendar for automatic session scheduling.
           </p>
         </div>
 

@@ -117,8 +117,16 @@ export default function Home() {
         </div>
       </div>
 
-      <footer className="py-8 text-center text-gray-500 text-sm">
-        <p>Connect students with alumni mentors anonymously</p>
+      <footer className="py-8 text-center text-gray-500 text-sm border-t border-gray-100">
+        <p className="mb-4">Connect students with alumni mentors anonymously</p>
+        <div className="flex justify-center gap-6">
+          <Link href="/privacy" className="hover:text-gray-700">
+            Privacy Policy
+          </Link>
+          <Link href="/terms" className="hover:text-gray-700">
+            Terms of Service
+          </Link>
+        </div>
       </footer>
     </main>
   );
