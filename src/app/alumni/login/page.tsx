@@ -9,16 +9,16 @@ export default function AlumniLoginPage() {
       <div className="max-w-md w-full mx-4">
         <div className="text-center mb-8">
           <Link href="/" className="text-2xl font-bold text-primary-500">
-            MentorMatch
+            MentoraSI
           </Link>
         </div>
 
         <div className="bg-[var(--card-bg)] p-8 rounded-xl border border-[var(--card-border)]">
           <h1 className="text-2xl font-bold text-[var(--foreground)] mb-2 text-center">
-            Alumni Login
+            Login de Ex-Alunos
           </h1>
           <p className="text-[var(--muted)] text-center mb-8">
-            Sign in with Google to manage your availability and connect your calendar.
+            Entre com o Google para gerenciar sua disponibilidade e conectar seu calendário.
           </p>
 
           <a
@@ -43,25 +43,25 @@ export default function AlumniLoginPage() {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-            Continue with Google
+            Continuar com Google
           </a>
 
           <p className="text-xs text-[var(--muted)] text-center mt-6">
-            By signing in, you agree to our{" "}
+            Ao entrar, você concorda com nossos{" "}
             <Link href="/terms" className="text-primary-500 hover:text-primary-700">
-              Terms of Service
+              Termos de Serviço
             </Link>{" "}
-            and{" "}
+            e{" "}
             <Link href="/privacy" className="text-primary-500 hover:text-primary-700">
-              Privacy Policy
+              Política de Privacidade
             </Link>
-            , and to connect your Google Calendar for automatic session scheduling.
+            , e em conectar seu Google Calendar para agendamento automático de sessões.
           </p>
         </div>
 
         <p className="text-center mt-6 text-[var(--muted)]">
           <Link href="/" className="text-primary-500 hover:text-primary-700">
-            Back to Home
+            Voltar ao Início
           </Link>
         </p>
       </div>

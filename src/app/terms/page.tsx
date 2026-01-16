@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Terms of Service - MentorMatch",
-  description: "Terms of Service for MentorMatch anonymous alumni mentoring platform",
+  title: "Termos de Serviço - MentoraSI",
+  description: "Termos de Serviço para a plataforma de mentoria anônima de ex-alunos MentoraSI",
 };
 
 export default function TermsOfServicePage() {
@@ -11,169 +11,169 @@ export default function TermsOfServicePage() {
       <nav className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="max-w-4xl mx-auto">
           <Link href="/" className="text-2xl font-bold text-primary-700">
-            MentorMatch
+            MentoraSI
           </Link>
         </div>
       </nav>
 
       <div className="max-w-4xl mx-auto px-6 py-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8">Terms of Service</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-8">Termos de Serviço</h1>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 prose prose-gray max-w-none">
           <p className="text-gray-600 mb-6">
-            <strong>Last updated:</strong> January 2025
+            <strong>Última atualização:</strong> Janeiro 2025
           </p>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Acceptance of Terms</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Aceitação dos Termos</h2>
             <p className="text-gray-700">
-              By accessing or using MentorMatch (&quot;the Service&quot;), you agree to be bound
-              by these Terms of Service. If you do not agree to these terms, please do
-              not use the Service.
+              Ao acessar ou usar MentoraSI (&quot;o Serviço&quot;), você concorda em ficar vinculado
+              a estes Termos de Serviço. Se você não concordar com estes termos, por favor, não
+              use o Serviço.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">2. Description of Service</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">2. Descrição do Serviço</h2>
             <p className="text-gray-700">
-              MentorMatch is an anonymous mentoring platform that connects university
-              students with alumni mentors. The platform allows alumni to set their
-              availability and students to book mentoring sessions without knowing
-              the identity of the mentor beforehand.
+              MentoraSI é uma plataforma de mentoria anônima que conecta estudantes
+              universitários com mentores ex-alunos. A plataforma permite que ex-alunos definam sua
+              disponibilidade e estudantes agendem sessões de mentoria sem saber
+              a identidade do mentor previamente.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">3. User Accounts</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">3. Contas de Usuário</h2>
 
-            <h3 className="text-xl font-medium text-gray-800 mb-3">Alumni Accounts</h3>
+            <h3 className="text-xl font-medium text-gray-800 mb-3">Contas de Ex-Alunos</h3>
             <ul className="list-disc pl-6 text-gray-700 mb-4 space-y-2">
-              <li>You must authenticate using a valid Google account</li>
-              <li>You must provide accurate information about your availability</li>
-              <li>You are responsible for maintaining the confidentiality of your account</li>
-              <li>You grant us permission to access your Google Calendar for creating meeting events</li>
+              <li>Você deve autenticar usando uma conta Google válida</li>
+              <li>Você deve fornecer informações precisas sobre sua disponibilidade</li>
+              <li>Você é responsável por manter a confidencialidade de sua conta</li>
+              <li>Você nos concede permissão para acessar seu Google Calendar para criar eventos de reunião</li>
             </ul>
 
-            <h3 className="text-xl font-medium text-gray-800 mb-3">Student Bookings</h3>
+            <h3 className="text-xl font-medium text-gray-800 mb-3">Agendamentos de Estudantes</h3>
             <ul className="list-disc pl-6 text-gray-700 space-y-2">
-              <li>You must provide a valid email address when booking</li>
-              <li>You agree to attend scheduled sessions or cancel in advance</li>
-              <li>You understand that mentor identity is revealed only during the session</li>
+              <li>Você deve fornecer um endereço de e-mail válido ao agendar</li>
+              <li>Você concorda em comparecer às sessões agendadas ou cancelar com antecedência</li>
+              <li>Você entende que a identidade do mentor é revelada apenas durante a sessão</li>
             </ul>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">4. Acceptable Use</h2>
-            <p className="text-gray-700 mb-4">You agree not to:</p>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">4. Uso Aceitável</h2>
+            <p className="text-gray-700 mb-4">Você concorda em não:</p>
             <ul className="list-disc pl-6 text-gray-700 space-y-2">
-              <li>Use the Service for any unlawful purpose</li>
-              <li>Harass, abuse, or harm other users</li>
-              <li>Impersonate any person or entity</li>
-              <li>Interfere with or disrupt the Service</li>
-              <li>Attempt to gain unauthorized access to any part of the Service</li>
-              <li>Use the Service to send spam or unsolicited communications</li>
-              <li>Book sessions with no intention of attending</li>
-              <li>Share confidential information disclosed during mentoring sessions without consent</li>
+              <li>Usar o Serviço para qualquer propósito ilegal</li>
+              <li>Assediar, abusar ou prejudicar outros usuários</li>
+              <li>Se passar por qualquer pessoa ou entidade</li>
+              <li>Interferir ou perturbar o Serviço</li>
+              <li>Tentar obter acesso não autorizado a qualquer parte do Serviço</li>
+              <li>Usar o Serviço para enviar spam ou comunicações não solicitadas</li>
+              <li>Agendar sessões sem intenção de comparecer</li>
+              <li>Compartilhar informações confidenciais divulgadas durante sessões de mentoria sem consentimento</li>
             </ul>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">5. Mentoring Sessions</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">5. Sessões de Mentoria</h2>
             <ul className="list-disc pl-6 text-gray-700 space-y-2">
-              <li>Sessions are for educational and career guidance purposes only</li>
-              <li>Mentors provide advice based on their personal experience; this is not professional consulting</li>
-              <li>We do not guarantee any specific outcomes from mentoring sessions</li>
-              <li>Both parties should treat each other with respect and professionalism</li>
-              <li>Sessions may be conducted via Google Meet or other video conferencing tools</li>
+              <li>As sessões são apenas para fins educacionais e orientação profissional</li>
+              <li>Os mentores fornecem conselhos baseados em sua experiência pessoal; isto não é consultoria profissional</li>
+              <li>Não garantimos nenhum resultado específico das sessões de mentoria</li>
+              <li>Ambas as partes devem tratar umas às outras com respeito e profissionalismo</li>
+              <li>As sessões podem ser conduzidas via Google Meet ou outras ferramentas de videoconferência</li>
             </ul>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">6. Cancellations</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">6. Cancelamentos</h2>
             <p className="text-gray-700">
-              We encourage users to cancel sessions as early as possible if they cannot
-              attend. Repeated no-shows may result in account restrictions or termination.
+              Encorajamos os usuários a cancelar sessões o mais cedo possível se não puderem
+              comparecer. Faltas repetidas podem resultar em restrições ou encerramento da conta.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">7. Intellectual Property</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">7. Propriedade Intelectual</h2>
             <p className="text-gray-700">
-              The Service and its original content, features, and functionality are
-              owned by MentorMatch and are protected by international copyright,
-              trademark, and other intellectual property laws.
+              O Serviço e seu conteúdo original, recursos e funcionalidades são
+              de propriedade da MentoraSI e são protegidos por direitos autorais internacionais,
+              marcas registradas e outras leis de propriedade intelectual.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">8. Privacy</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">8. Privacidade</h2>
             <p className="text-gray-700">
-              Your use of the Service is also governed by our{" "}
+              Seu uso do Serviço também é regido por nossa{" "}
               <Link href="/privacy" className="text-primary-600 hover:text-primary-800">
-                Privacy Policy
+                Política de Privacidade
               </Link>
-              . Please review it to understand our practices.
+              . Por favor, revise-a para entender nossas práticas.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">9. Disclaimers</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">9. Isenções de Responsabilidade</h2>
             <p className="text-gray-700 mb-4">
-              THE SERVICE IS PROVIDED &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; WITHOUT WARRANTIES
-              OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+              O SERVIÇO É FORNECIDO &quot;COMO ESTÁ&quot; E &quot;CONFORME DISPONÍVEL&quot; SEM GARANTIAS
+              DE QUALQUER TIPO, SEJAM EXPRESSAS OU IMPLÍCITAS.
             </p>
             <ul className="list-disc pl-6 text-gray-700 space-y-2">
-              <li>We do not guarantee the availability of mentors at any given time</li>
-              <li>We do not verify the credentials or qualifications of alumni mentors</li>
-              <li>We are not responsible for the content of mentoring sessions</li>
-              <li>We do not guarantee that the Service will be uninterrupted or error-free</li>
+              <li>Não garantimos a disponibilidade de mentores em qualquer momento</li>
+              <li>Não verificamos as credenciais ou qualificações dos mentores ex-alunos</li>
+              <li>Não somos responsáveis pelo conteúdo das sessões de mentoria</li>
+              <li>Não garantimos que o Serviço será ininterrupto ou livre de erros</li>
             </ul>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">10. Limitation of Liability</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">10. Limitação de Responsabilidade</h2>
             <p className="text-gray-700">
-              TO THE MAXIMUM EXTENT PERMITTED BY LAW, MENTORMATCH SHALL NOT BE LIABLE
-              FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES,
-              OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY,
-              OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES RESULTING
-              FROM YOUR USE OF THE SERVICE.
+              NA MÁXIMA EXTENSÃO PERMITIDA POR LEI, A MENTORASI NÃO SERÁ RESPONSÁVEL
+              POR QUAISQUER DANOS INDIRETOS, INCIDENTAIS, ESPECIAIS, CONSEQUENCIAIS OU PUNITIVOS,
+              OU QUALQUER PERDA DE LUCROS OU RECEITAS, SEJAM INCORRIDOS DIRETA OU INDIRETAMENTE,
+              OU QUALQUER PERDA DE DADOS, USO, BOA VONTADE OU OUTRAS PERDAS INTANGÍVEIS RESULTANTES
+              DE SEU USO DO SERVIÇO.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">11. Termination</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">11. Encerramento</h2>
             <p className="text-gray-700">
-              We may terminate or suspend your access to the Service immediately,
-              without prior notice, for any reason, including breach of these Terms.
-              You may also delete your account at any time by contacting us.
+              Podemos encerrar ou suspender seu acesso ao Serviço imediatamente,
+              sem aviso prévio, por qualquer motivo, incluindo violação destes Termos.
+              Você também pode excluir sua conta a qualquer momento entrando em contato conosco.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">12. Changes to Terms</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">12. Alterações nos Termos</h2>
             <p className="text-gray-700">
-              We reserve the right to modify these Terms at any time. We will provide
-              notice of significant changes by posting the new Terms on this page.
-              Your continued use of the Service after changes constitutes acceptance
-              of the new Terms.
+              Reservamo-nos o direito de modificar estes Termos a qualquer momento. Forneceremos
+              aviso de alterações significativas postando os novos Termos nesta página.
+              Seu uso continuado do Serviço após as alterações constitui aceitação
+              dos novos Termos.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">13. Governing Law</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">13. Lei Aplicável</h2>
             <p className="text-gray-700">
-              These Terms shall be governed by and construed in accordance with
-              applicable laws, without regard to conflict of law principles.
+              Estes Termos serão regidos e interpretados de acordo com as
+              leis aplicáveis, sem consideração dos princípios de conflito de leis.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">14. Contact Us</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">14. Contato</h2>
             <p className="text-gray-700">
-              If you have questions about these Terms, please contact us at:{" "}
-              <a href="mailto:support@mentormatch.com" className="text-primary-600 hover:text-primary-800">
-                support@mentormatch.com
+              Se você tiver dúvidas sobre estes Termos, entre em contato conosco em:{" "}
+              <a href="mailto:support@mentorasi.com" className="text-primary-600 hover:text-primary-800">
+                support@mentorasi.com
               </a>
             </p>
           </section>
@@ -181,11 +181,11 @@ export default function TermsOfServicePage() {
 
         <div className="mt-8 text-center">
           <Link href="/" className="text-primary-600 hover:text-primary-800">
-            Back to Home
+            Voltar ao Início
           </Link>
           <span className="mx-4 text-gray-400">|</span>
           <Link href="/privacy" className="text-primary-600 hover:text-primary-800">
-            Privacy Policy
+            Política de Privacidade
           </Link>
         </div>
       </div>

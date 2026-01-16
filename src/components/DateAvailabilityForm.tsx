@@ -30,7 +30,7 @@ export function DateAvailabilityForm({ alumniId }: DateAvailabilityFormProps) {
 
     // Validate time range
     if (startTime >= endTime) {
-      setError("End time must be after start time");
+      setError("O horário de término deve ser após o horário de início");
       setIsSubmitting(false);
       return;
     }
@@ -41,7 +41,7 @@ export function DateAvailabilityForm({ alumniId }: DateAvailabilityFormProps) {
     today.setHours(0, 0, 0, 0);
 
     if (selected < today) {
-      setError("Please select a future date");
+      setError("Por favor, selecione uma data futura");
       setIsSubmitting(false);
       return;
     }
@@ -61,7 +61,7 @@ export function DateAvailabilityForm({ alumniId }: DateAvailabilityFormProps) {
       });
 
     if (insertError) {
-      setError("Failed to add availability. Please try again.");
+      setError("Falha ao adicionar disponibilidade. Por favor, tente novamente.");
       console.error(insertError);
     } else {
       router.refresh();
@@ -86,7 +86,7 @@ export function DateAvailabilityForm({ alumniId }: DateAvailabilityFormProps) {
             htmlFor="date"
             className="block text-sm font-medium text-[var(--foreground)] mb-1"
           >
-            Date
+            Data
           </label>
           <input
             type="date"
@@ -104,7 +104,7 @@ export function DateAvailabilityForm({ alumniId }: DateAvailabilityFormProps) {
             htmlFor="startTime"
             className="block text-sm font-medium text-[var(--foreground)] mb-1"
           >
-            Start Time
+            Horário de Início
           </label>
           <input
             type="time"
@@ -120,7 +120,7 @@ export function DateAvailabilityForm({ alumniId }: DateAvailabilityFormProps) {
             htmlFor="endTime"
             className="block text-sm font-medium text-[var(--foreground)] mb-1"
           >
-            End Time
+            Horário de Término
           </label>
           <input
             type="time"
@@ -133,7 +133,7 @@ export function DateAvailabilityForm({ alumniId }: DateAvailabilityFormProps) {
       </div>
 
       <p className="text-sm text-[var(--muted)]">
-        Add availability for a specific date up to 3 months in advance.
+        Adicione disponibilidade para uma data específica até 3 meses adiantado.
       </p>
 
       <button
@@ -141,7 +141,7 @@ export function DateAvailabilityForm({ alumniId }: DateAvailabilityFormProps) {
         disabled={isSubmitting}
         className="bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {isSubmitting ? "Adding..." : "Add Date Availability"}
+        {isSubmitting ? "Adicionando..." : "Adicionar Disponibilidade de Data"}
       </button>
     </form>
   );

@@ -79,12 +79,18 @@ export interface Database {
           slot_id: string;
           alumni_id: string;
           student_email: string;
+          student_name: string | null;
+          student_linkedin: string | null;
+          student_notes: string | null;
           session_date: string;
           start_time: string;
           end_time: string;
           google_event_id: string | null;
           meeting_link: string | null;
+          management_token: string | null;
           status: "pending" | "confirmed" | "cancelled" | "completed";
+          cancelled_at: string | null;
+          cancellation_reason: string | null;
           created_at: string;
         };
         Insert: {
@@ -92,12 +98,18 @@ export interface Database {
           slot_id: string;
           alumni_id: string;
           student_email: string;
+          student_name?: string | null;
+          student_linkedin?: string | null;
+          student_notes?: string | null;
           session_date: string;
           start_time: string;
           end_time: string;
           google_event_id?: string | null;
           meeting_link?: string | null;
+          management_token?: string | null;
           status?: "pending" | "confirmed" | "cancelled" | "completed";
+          cancelled_at?: string | null;
+          cancellation_reason?: string | null;
           created_at?: string;
         };
         Update: {
@@ -105,12 +117,18 @@ export interface Database {
           slot_id?: string;
           alumni_id?: string;
           student_email?: string;
+          student_name?: string | null;
+          student_linkedin?: string | null;
+          student_notes?: string | null;
           session_date?: string;
           start_time?: string;
           end_time?: string;
           google_event_id?: string | null;
           meeting_link?: string | null;
+          management_token?: string | null;
           status?: "pending" | "confirmed" | "cancelled" | "completed";
+          cancelled_at?: string | null;
+          cancellation_reason?: string | null;
           created_at?: string;
         };
       };

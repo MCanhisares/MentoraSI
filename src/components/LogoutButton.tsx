@@ -7,7 +7,7 @@ export function LogoutButton() {
         type="submit"
         className="text-[var(--muted)] hover:text-[var(--foreground)] text-sm"
       >
-        Sign Out
+        Sair
       </button>
     </form>
   );

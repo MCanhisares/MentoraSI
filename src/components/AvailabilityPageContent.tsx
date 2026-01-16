@@ -7,13 +7,13 @@ import { AvailabilityForm } from "./AvailabilityForm";
 import { DateAvailabilityForm } from "./DateAvailabilityForm";
 
 const DAYS_OF_WEEK = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
+  "Domingo",
+  "Segunda-feira",
+  "Terça-feira",
+  "Quarta-feira",
+  "Quinta-feira",
+  "Sexta-feira",
+  "Sábado",
 ];
 
 interface AvailabilitySlot {
@@ -41,7 +41,7 @@ export function AvailabilityPageContent({ alumniId, slots }: AvailabilityPageCon
     <>
       <div className="bg-[var(--card-bg)] p-6 rounded-xl border border-[var(--card-border)] mb-8">
         <h2 className="text-xl font-semibold text-[var(--foreground)] mb-4">
-          Add Availability
+          Adicionar Disponibilidade
         </h2>
 
         <AvailabilityTabs activeTab={activeTab} onTabChange={setActiveTab} />
@@ -55,14 +55,14 @@ export function AvailabilityPageContent({ alumniId, slots }: AvailabilityPageCon
 
       <div className="bg-[var(--card-bg)] p-6 rounded-xl border border-[var(--card-border)]">
         <h2 className="text-xl font-semibold text-[var(--foreground)] mb-4">
-          Current Availability
+          Disponibilidade Atual
         </h2>
 
         {/* Recurring Weekly Slots */}
         {recurringSlots.length > 0 && (
           <div className="mb-6">
             <h3 className="text-sm font-medium text-[var(--muted)] uppercase tracking-wide mb-3">
-              Weekly Schedule
+              Cronograma Semanal
             </h3>
             <div className="space-y-3">
               {recurringSlots.map((slot) => (
@@ -72,7 +72,7 @@ export function AvailabilityPageContent({ alumniId, slots }: AvailabilityPageCon
                 >
                   <div>
                     <p className="font-medium text-[var(--foreground)]">
-                      Every {DAYS_OF_WEEK[slot.day_of_week]}
+                      Toda {DAYS_OF_WEEK[slot.day_of_week]}
                     </p>
                     <p className="text-sm text-[var(--muted)]">
                       {slot.start_time.slice(0, 5)} - {slot.end_time.slice(0, 5)}
@@ -84,7 +84,7 @@ export function AvailabilityPageContent({ alumniId, slots }: AvailabilityPageCon
                       type="submit"
                       className="text-[var(--error-text)] hover:opacity-80 text-sm"
                     >
-                      Remove
+                      Remover
                     </button>
                   </form>
                 </div>
@@ -97,7 +97,7 @@ export function AvailabilityPageContent({ alumniId, slots }: AvailabilityPageCon
         {individualSlots.length > 0 && (
           <div className="mb-6">
             <h3 className="text-sm font-medium text-[var(--muted)] uppercase tracking-wide mb-3">
-              Individual Dates
+              Datas Individuais
             </h3>
             <div className="space-y-3">
               {individualSlots.map((slot) => (
@@ -121,7 +121,7 @@ export function AvailabilityPageContent({ alumniId, slots }: AvailabilityPageCon
                       type="submit"
                       className="text-[var(--error-text)] hover:opacity-80 text-sm"
                     >
-                      Remove
+                      Remover
                     </button>
                   </form>
                 </div>
@@ -132,7 +132,7 @@ export function AvailabilityPageContent({ alumniId, slots }: AvailabilityPageCon
 
         {recurringSlots.length === 0 && individualSlots.length === 0 && (
           <p className="text-[var(--muted)]">
-            No availability set yet. Add your first time slot above.
+            Nenhuma disponibilidade definida ainda. Adicione seu primeiro horário acima.
           </p>
         )}
       </div>

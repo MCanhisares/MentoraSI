@@ -4,23 +4,23 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[var(--background)]">
       <nav className="px-6 py-4 flex justify-between items-center max-w-7xl mx-auto">
-        <h1 className="text-2xl font-bold text-primary-500">MentorMatch</h1>
+        <h1 className="text-2xl font-bold text-primary-500">MentoraSI</h1>
         <Link
           href="/alumni/login"
           className="text-primary-500 hover:text-primary-700 font-medium"
         >
-          Alumni Login
+          Login de Ex-Alunos
         </Link>
       </nav>
 
       <div className="max-w-7xl mx-auto px-6 py-20">
         <div className="text-center">
           <h2 className="text-5xl font-bold text-[var(--foreground)] mb-6">
-            Anonymous Alumni Mentoring
+            Mentoria Anônima de Ex-Alunos
           </h2>
           <p className="text-xl text-[var(--muted)] max-w-2xl mx-auto mb-10">
-            Get career guidance from experienced alumni. Book sessions anonymously
-            - focus on the advice, not the names.
+            Receba orientação profissional de ex-alunos experientes. Agende sessões anonimamente
+            - foque nos conselhos, não nos nomes.
           </p>
 
           <div className="flex gap-4 justify-center flex-wrap">
@@ -28,13 +28,13 @@ export default function Home() {
               href="/book"
               className="bg-primary-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-primary-700 transition-colors"
             >
-              Book a Session
+              Agendar uma Sessão
             </Link>
             <Link
               href="/alumni/login"
               className="border-2 border-primary-500 text-primary-500 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-[var(--surface-2)] transition-colors"
             >
-              Become a Mentor
+              Ser um Mentor
             </Link>
           </div>
         </div>
@@ -57,11 +57,11 @@ export default function Home() {
               </svg>
             </div>
             <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">
-              Anonymous Booking
+              Agendamento Anônimo
             </h3>
             <p className="text-[var(--muted)]">
-              Book sessions without knowing who you will meet. Focus purely on
-              getting valuable advice.
+              Agende sessões sem saber quem encontrará. Foque puramente em
+              receber conselhos valiosos.
             </p>
           </div>
 
@@ -82,11 +82,11 @@ export default function Home() {
               </svg>
             </div>
             <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">
-              Flexible Scheduling
+              Agendamento Flexível
             </h3>
             <p className="text-[var(--muted)]">
-              Alumni set their availability. Students pick from aggregated time
-              slots that work for them.
+              Ex-alunos definem sua disponibilidade. Estudantes escolhem entre horários
+              agregados que funcionam para eles.
             </p>
           </div>
 
@@ -107,24 +107,24 @@ export default function Home() {
               </svg>
             </div>
             <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">
-              Instant Calendar Sync
+              Sincronização Instantânea de Calendário
             </h3>
             <p className="text-[var(--muted)]">
-              Sessions automatically appear in Google Calendar. No manual
-              coordination needed.
+              As sessões aparecem automaticamente no Google Calendar. Não é necessária
+              coordenação manual.
             </p>
           </div>
         </div>
       </div>
 
       <footer className="py-8 text-center text-[var(--muted)] text-sm border-t border-[var(--card-border)]">
-        <p className="mb-4">Connect students with alumni mentors anonymously</p>
+        <p className="mb-4">Conecte estudantes com mentores ex-alunos anonimamente</p>
         <div className="flex justify-center gap-6">
           <Link href="/privacy" className="hover:text-[var(--foreground)]">
-            Privacy Policy
+            Política de Privacidade
           </Link>
           <Link href="/terms" className="hover:text-[var(--foreground)]">
-            Terms of Service
+            Termos de Serviço
           </Link>
         </div>
       </footer>

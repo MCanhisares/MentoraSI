@@ -1,15 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { addDays, format, getDay, startOfDay } from "date-fns";
 
-interface GeneratedSlot {
-  id: string;
-  date: string;
-  start_time: string;
-  end_time: string;
-  slot_id: string;
-  alumni_id: string;
-}
+const SESSION_DURATION_MINUTES = 60; // 1 hour sessions
 
 interface AvailabilitySlotRow {
   id: string;
@@ -28,13 +21,57 @@ interface BookedSessionRow {
   alumni_id: string;
 }
 
-export async function GET() {
+// Break down a time range into 1-hour slots
+function breakIntoHourSlots(
+  startTime: string,
+  endTime: string
+): Array<{ start: string; end: string }> {
+  const slots: Array<{ start: string; end: string }> = [];
+
+  // Parse times (format: HH:MM or HH:MM:SS)
+  const [startHour, startMin] = startTime.split(":").map(Number);
+  const [endHour, endMin] = endTime.split(":").map(Number);
+
+  const startMinutes = startHour * 60 + startMin;
+  const endMinutes = endHour * 60 + endMin;
+
+  // Generate 1-hour slots
+  let currentStart = startMinutes;
+  while (currentStart + SESSION_DURATION_MINUTES <= endMinutes) {
+    const currentEnd = currentStart + SESSION_DURATION_MINUTES;
+
+    const startH = Math.floor(currentStart / 60);
+    const startM = currentStart % 60;
+    const endH = Math.floor(currentEnd / 60);
+    const endM = currentEnd % 60;
+
+    slots.push({
+      start: `${startH.toString().padStart(2, "0")}:${startM.toString().padStart(2, "0")}:00`,
+      end: `${endH.toString().padStart(2, "0")}:${endM.toString().padStart(2, "0")}:00`,
+    });
+
+    currentStart = currentEnd;
+  }
+
+  return slots;
+}
+
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const alumniIdFilter = searchParams.get("alumni_id");
+
   const supabase = await createClient();
 
-  // Get all recurring availability slots
-  const { data: availabilitySlots, error } = await supabase
+  // Get availability slots (optionally filtered by alumni_id for rescheduling)
+  let query = supabase
     .from("availability_slots")
-    .select("id, alumni_id, day_of_week, start_time, end_time, is_recurring, specific_date") as { data: AvailabilitySlotRow[] | null; error: unknown };
+    .select("id, alumni_id, day_of_week, start_time, end_time, is_recurring, specific_date");
+
+  if (alumniIdFilter) {
+    query = query.eq("alumni_id", alumniIdFilter);
+  }
+
+  const { data: availabilitySlots, error } = await query as { data: AvailabilitySlotRow[] | null; error: unknown };
 
   if (error) {
     console.error("Error fetching availability:", error);
@@ -52,16 +89,24 @@ export async function GET() {
     .lte("session_date", threeMonthsLater)
     .in("status", ["pending", "confirmed"]) as { data: BookedSessionRow[] | null };
 
-  // Create a set of booked slot+date combinations
+  // Create a set of booked alumni+date+time combinations
+  // Normalize times to HH:MM:SS format for consistent matching
   const bookedSet = new Set(
-    bookedSessions?.map(
-      (s: BookedSessionRow) => `${s.alumni_id}-${s.session_date}-${s.start_time}`
-    ) || []
+    bookedSessions?.map((s: BookedSessionRow) => {
+      const normalizedTime = s.start_time.length === 5 ? `${s.start_time}:00` : s.start_time;
+      return `${s.alumni_id}-${s.session_date}-${normalizedTime}`;
+    }) || []
   );
 
-  // Generate concrete slots for the next 90 days (3 months)
-  // This allows for both recurring weekly slots and individual date slots
-  const generatedSlots: GeneratedSlot[] = [];
+  // Track available slots by date+time (deduplicated)
+  // Key: unique string, Value: slot info + available alumni
+  interface TimeSlotData {
+    date: string;
+    start_time: string;
+    end_time: string;
+    available_alumni: Array<{ slot_id: string; alumni_id: string }>;
+  }
+  const slotsByDateTime: Map<string, TimeSlotData> = new Map();
 
   for (let i = 0; i < 90; i++) {
     const date = addDays(startOfDay(new Date()), i);
@@ -71,59 +116,82 @@ export async function GET() {
     for (const slot of availabilitySlots || []) {
       // Check if this recurring slot applies to this day
       if (slot.is_recurring && slot.day_of_week === dayOfWeek) {
-        const key = `${slot.alumni_id}-${dateStr}-${slot.start_time}`;
+        const hourSlots = breakIntoHourSlots(slot.start_time, slot.end_time);
 
-        // Skip if already booked
-        if (!bookedSet.has(key)) {
-          generatedSlots.push({
-            id: `${slot.id}-${dateStr}`,
-            date: dateStr,
-            start_time: slot.start_time,
-            end_time: slot.end_time,
-            slot_id: slot.id,
-            alumni_id: slot.alumni_id,
-          });
+        for (const hourSlot of hourSlots) {
+          const bookedKey = `${slot.alumni_id}-${dateStr}-${hourSlot.start}`;
+
+          // Only add if this alumni is not booked for this time
+          if (!bookedSet.has(bookedKey)) {
+            const timeKey = `${dateStr}|${hourSlot.start}|${hourSlot.end}`;
+
+            if (!slotsByDateTime.has(timeKey)) {
+              slotsByDateTime.set(timeKey, {
+                date: dateStr,
+                start_time: hourSlot.start,
+                end_time: hourSlot.end,
+                available_alumni: [],
+              });
+            }
+            slotsByDateTime.get(timeKey)!.available_alumni.push({
+              slot_id: slot.id,
+              alumni_id: slot.alumni_id,
+            });
+          }
         }
       }
 
       // Check specific date slots
       if (slot.specific_date && slot.specific_date === dateStr) {
-        const key = `${slot.alumni_id}-${dateStr}-${slot.start_time}`;
+        const hourSlots = breakIntoHourSlots(slot.start_time, slot.end_time);
 
-        if (!bookedSet.has(key)) {
-          generatedSlots.push({
-            id: `${slot.id}-${dateStr}`,
-            date: dateStr,
-            start_time: slot.start_time,
-            end_time: slot.end_time,
-            slot_id: slot.id,
-            alumni_id: slot.alumni_id,
-          });
+        for (const hourSlot of hourSlots) {
+          const bookedKey = `${slot.alumni_id}-${dateStr}-${hourSlot.start}`;
+
+          if (!bookedSet.has(bookedKey)) {
+            const timeKey = `${dateStr}|${hourSlot.start}|${hourSlot.end}`;
+
+            if (!slotsByDateTime.has(timeKey)) {
+              slotsByDateTime.set(timeKey, {
+                date: dateStr,
+                start_time: hourSlot.start,
+                end_time: hourSlot.end,
+                available_alumni: [],
+              });
+            }
+            slotsByDateTime.get(timeKey)!.available_alumni.push({
+              slot_id: slot.id,
+              alumni_id: slot.alumni_id,
+            });
+          }
         }
       }
     }
   }
 
+  // Convert to array
+  const uniqueSlots = Array.from(slotsByDateTime.values()).map((slotData) => ({
+    id: `${slotData.date}|${slotData.start_time}`,
+    date: slotData.date,
+    start_time: slotData.start_time,
+    end_time: slotData.end_time,
+    // Don't expose alumni info - booking API will find available alumni
+    booking_key: Buffer.from(
+      JSON.stringify({
+        date: slotData.date,
+        start_time: slotData.start_time,
+        end_time: slotData.end_time,
+      })
+    ).toString("base64"),
+  }));
+
   // Sort by date and time
-  generatedSlots.sort((a, b) => {
+  uniqueSlots.sort((a, b) => {
     if (a.date !== b.date) {
       return a.date.localeCompare(b.date);
     }
     return a.start_time.localeCompare(b.start_time);
   });
 
-  // Return slots WITHOUT alumni_id for anonymity (but keep it for booking)
-  // We'll include alumni_id in a way that can be used for booking but not displayed
-  const anonymousSlots = generatedSlots.map((slot) => ({
-    id: slot.id,
-    date: slot.date,
-    start_time: slot.start_time,
-    end_time: slot.end_time,
-    // Encode slot_id and alumni_id together for booking
-    booking_key: Buffer.from(
-      JSON.stringify({ slot_id: slot.slot_id, alumni_id: slot.alumni_id })
-    ).toString("base64"),
-  }));
-
-  return NextResponse.json({ slots: anonymousSlots });
+  return NextResponse.json({ slots: uniqueSlots });
 }

@@ -44,14 +44,14 @@ export default async function AvailabilityPage() {
       <nav className="bg-[var(--card-bg)] border-b border-[var(--card-border)] px-6 py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <Link href="/" className="text-2xl font-bold text-primary-500">
-            MentorMatch
+            MentoraSI
           </Link>
           <div className="flex items-center gap-4">
             <Link
               href="/alumni/dashboard"
               className="text-[var(--muted)] hover:text-[var(--foreground)]"
             >
-              Dashboard
+              Painel de Controle
             </Link>
             <span className="text-[var(--muted)]">{alumni.name || alumni.email}</span>
             <LogoutButton />
@@ -62,11 +62,11 @@ export default async function AvailabilityPage() {
       <div className="max-w-4xl mx-auto px-6 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-[var(--foreground)] mb-2">
-            Set Your Availability
+            Definir sua Disponibilidade
           </h1>
           <p className="text-[var(--muted)]">
-            Define when you are available for mentoring sessions. Use the Weekly Schedule
-            for recurring availability or Individual Dates for specific one-time slots.
+            Defina quando você está disponível para sessões de mentoria. Use o Cronograma Semanal
+            para disponibilidade recorrente ou Datas Individuais para horários específicos únicos.
           </p>
         </div>
 

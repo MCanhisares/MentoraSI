@@ -16,7 +16,7 @@ export function AvailabilityTabs({ activeTab, onTabChange }: AvailabilityTabsPro
             : "border-transparent text-[var(--muted)] hover:text-[var(--foreground)] hover:border-[var(--muted-foreground)]"
         }`}
       >
-        Weekly Schedule
+        Cronograma Semanal
       </button>
       <button
         onClick={() => onTabChange("individual")}
@@ -26,7 +26,7 @@ export function AvailabilityTabs({ activeTab, onTabChange }: AvailabilityTabsPro
             : "border-transparent text-[var(--muted)] hover:text-[var(--foreground)] hover:border-[var(--muted-foreground)]"
         }`}
       >
-        Individual Dates
+        Datas Individuais
       </button>
     </div>
   );

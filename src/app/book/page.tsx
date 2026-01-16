@@ -7,13 +7,13 @@ export default function BookPage() {
       <nav className="bg-[var(--card-bg)] border-b border-[var(--card-border)] px-6 py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <Link href="/" className="text-2xl font-bold text-primary-500">
-            MentorMatch
+            MentoraSI
           </Link>
           <Link
             href="/alumni/login"
             className="text-primary-500 hover:text-primary-700 font-medium"
           >
-            Alumni Login
+            Login de Ex-Alunos
           </Link>
         </div>
       </nav>
@@ -21,11 +21,11 @@ export default function BookPage() {
       <div className="max-w-4xl mx-auto px-6 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-[var(--foreground)] mb-2">
-            Book a Mentoring Session
+            Agendar uma Sessão de Mentoria
           </h1>
           <p className="text-[var(--muted)]">
-            Select an available time slot to book an anonymous session with an
-            alumni mentor. You will not know who you are meeting until the session.
+            Selecione um horário disponível para agendar uma sessão anônima com um
+            mentor ex-aluno. Você não saberá com quem está se encontrando até a sessão.
           </p>
         </div>
 

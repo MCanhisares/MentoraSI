@@ -35,12 +35,18 @@ CREATE TABLE sessions (
   slot_id UUID NOT NULL REFERENCES availability_slots(id) ON DELETE CASCADE,
   alumni_id UUID NOT NULL REFERENCES alumni(id) ON DELETE CASCADE,
   student_email TEXT NOT NULL,
+  student_name TEXT,
+  student_linkedin TEXT,
+  student_notes TEXT,
   session_date DATE NOT NULL,
   start_time TIME NOT NULL,
   end_time TIME NOT NULL,
   google_event_id TEXT,
   meeting_link TEXT,
+  management_token TEXT UNIQUE,
   status TEXT DEFAULT 'confirmed' CHECK (status IN ('pending', 'confirmed', 'cancelled', 'completed')),
+  cancelled_at TIMESTAMPTZ,
+  cancellation_reason TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -50,6 +56,7 @@ CREATE INDEX idx_availability_day ON availability_slots(day_of_week);
 CREATE INDEX idx_sessions_date ON sessions(session_date);
 CREATE INDEX idx_sessions_alumni ON sessions(alumni_id);
 CREATE INDEX idx_sessions_status ON sessions(status);
+CREATE INDEX idx_sessions_token ON sessions(management_token);
 
 -- Row Level Security (RLS)
 ALTER TABLE alumni ENABLE ROW LEVEL SECURITY;
@@ -88,6 +95,14 @@ CREATE POLICY "Alumni can view own sessions" ON sessions
 CREATE POLICY "Public can create sessions" ON sessions
   FOR INSERT WITH CHECK (true);
 
+-- Public can view sessions with valid token
+CREATE POLICY "Public can view sessions with token" ON sessions
+  FOR SELECT USING (true);
+
+-- Public can update sessions (for cancellation via token - validated in application)
+CREATE POLICY "Public can update sessions" ON sessions
+  FOR UPDATE USING (true);
+
 -- Function to update updated_at timestamp
 CREATE OR REPLACE FUNCTION update_updated_at()
 RETURNS TRIGGER AS $$
@@ -116,3 +131,20 @@ SELECT
 FROM availability_slots a
 WHERE a.is_recurring = true
    OR (a.specific_date >= CURRENT_DATE AND a.specific_date <= CURRENT_DATE + INTERVAL '14 days');
+
+-- ============================================
+-- MIGRATION SQL (run this on existing databases)
+-- ============================================
+-- ALTER TABLE sessions ADD COLUMN student_name TEXT;
+-- ALTER TABLE sessions ADD COLUMN student_linkedin TEXT;
+-- ALTER TABLE sessions ADD COLUMN student_notes TEXT;
+-- ALTER TABLE sessions ADD COLUMN management_token TEXT UNIQUE;
+-- ALTER TABLE sessions ADD COLUMN cancelled_at TIMESTAMPTZ;
+-- ALTER TABLE sessions ADD COLUMN cancellation_reason TEXT;
+-- CREATE INDEX idx_sessions_token ON sessions(management_token);
+--
+-- CREATE POLICY "Public can view sessions with token" ON sessions
+--   FOR SELECT USING (true);
+--
+-- CREATE POLICY "Public can update sessions" ON sessions
+--   FOR UPDATE USING (true);

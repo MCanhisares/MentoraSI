@@ -86,7 +86,7 @@ export async function createCalendarEvent(
     attendees: [{ email: eventDetails.attendeeEmail }],
     conferenceData: {
       createRequest: {
-        requestId: `mentormatch-${Date.now()}-${Math.random().toString(36).substring(7)}`,
+        requestId: `mentorasi-${Date.now()}-${Math.random().toString(36).substring(7)}`,
         conferenceSolutionKey: { type: "hangoutsMeet" },
       },
     },
@@ -105,6 +105,108 @@ export async function createCalendarEvent(
 
   return {
     eventId: response.data.id,
+    meetingLink: response.data.hangoutLink,
+  };
+}
+
+export async function deleteCalendarEvent(
+  refreshToken: string,
+  eventId: string
+): Promise<boolean> {
+  const oauth2Client = getOAuth2Client();
+  oauth2Client.setCredentials({ refresh_token: refreshToken });
+
+  // Force a token refresh to ensure we have a valid access token
+  try {
+    const { credentials } = await oauth2Client.refreshAccessToken();
+    oauth2Client.setCredentials(credentials);
+  } catch (refreshError) {
+    console.error("Failed to refresh access token:", refreshError);
+    throw new Error("Failed to refresh Google access token.");
+  }
+
+  const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+
+  try {
+    await calendar.events.delete({
+      calendarId: "primary",
+      eventId: eventId,
+      sendUpdates: "all",
+    });
+    console.log("Calendar event deleted:", eventId);
+    return true;
+  } catch (error) {
+    console.error("Failed to delete calendar event:", error);
+    return false;
+  }
+}
+
+export async function updateCalendarEvent(
+  refreshToken: string,
+  eventId: string,
+  eventDetails: {
+    summary?: string;
+    description?: string;
+    startDateTime?: string;
+    endDateTime?: string;
+    attendeeEmail?: string;
+    timeZone?: string;
+  }
+): Promise<{ eventId: string; meetingLink: string | null | undefined }> {
+  const oauth2Client = getOAuth2Client();
+  oauth2Client.setCredentials({ refresh_token: refreshToken });
+
+  // Force a token refresh to ensure we have a valid access token
+  try {
+    const { credentials } = await oauth2Client.refreshAccessToken();
+    oauth2Client.setCredentials(credentials);
+  } catch (refreshError) {
+    console.error("Failed to refresh access token:", refreshError);
+    throw new Error("Failed to refresh Google access token.");
+  }
+
+  const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+
+  // Use America/Sao_Paulo as default timezone for Brazil
+  const timeZone = eventDetails.timeZone || "America/Sao_Paulo";
+
+  const updateData: Record<string, unknown> = {};
+
+  if (eventDetails.summary) {
+    updateData.summary = eventDetails.summary;
+  }
+  if (eventDetails.description) {
+    updateData.description = eventDetails.description;
+  }
+  if (eventDetails.startDateTime) {
+    updateData.start = {
+      dateTime: eventDetails.startDateTime,
+      timeZone: timeZone,
+    };
+  }
+  if (eventDetails.endDateTime) {
+    updateData.end = {
+      dateTime: eventDetails.endDateTime,
+      timeZone: timeZone,
+    };
+  }
+  if (eventDetails.attendeeEmail) {
+    updateData.attendees = [{ email: eventDetails.attendeeEmail }];
+  }
+
+  console.log("Updating calendar event:", eventId, JSON.stringify(updateData, null, 2));
+
+  const response = await calendar.events.patch({
+    calendarId: "primary",
+    eventId: eventId,
+    requestBody: updateData,
+    sendUpdates: "all",
+  });
+
+  console.log("Calendar event updated:", response.data.id);
+
+  return {
+    eventId: response.data.id || eventId,
     meetingLink: response.data.hangoutLink,
   };
 }

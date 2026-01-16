@@ -5,13 +5,13 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 const DAYS_OF_WEEK = [
-  { value: 0, label: "Sunday" },
-  { value: 1, label: "Monday" },
-  { value: 2, label: "Tuesday" },
-  { value: 3, label: "Wednesday" },
-  { value: 4, label: "Thursday" },
-  { value: 5, label: "Friday" },
-  { value: 6, label: "Saturday" },
+  { value: 0, label: "Domingo" },
+  { value: 1, label: "Segunda-feira" },
+  { value: 2, label: "Terça-feira" },
+  { value: 3, label: "Quarta-feira" },
+  { value: 4, label: "Quinta-feira" },
+  { value: 5, label: "Sexta-feira" },
+  { value: 6, label: "Sábado" },
 ];
 
 interface AvailabilityFormProps {
@@ -35,7 +35,7 @@ export function AvailabilityForm({ alumniId }: AvailabilityFormProps) {
 
     // Validate time range
     if (startTime >= endTime) {
-      setError("End time must be after start time");
+      setError("O horário de término deve ser após o horário de início");
       setIsSubmitting(false);
       return;
     }
@@ -51,7 +51,7 @@ export function AvailabilityForm({ alumniId }: AvailabilityFormProps) {
       });
 
     if (insertError) {
-      setError("Failed to add availability. Please try again.");
+      setError("Falha ao adicionar disponibilidade. Por favor, tente novamente.");
       console.error(insertError);
     } else {
       router.refresh();
@@ -74,7 +74,7 @@ export function AvailabilityForm({ alumniId }: AvailabilityFormProps) {
             htmlFor="dayOfWeek"
             className="block text-sm font-medium text-[var(--foreground)] mb-1"
           >
-            Day of Week
+            Dia da Semana
           </label>
           <select
             id="dayOfWeek"
@@ -95,7 +95,7 @@ export function AvailabilityForm({ alumniId }: AvailabilityFormProps) {
             htmlFor="startTime"
             className="block text-sm font-medium text-[var(--foreground)] mb-1"
           >
-            Start Time
+            Horário de Início
           </label>
           <input
             type="time"
@@ -111,7 +111,7 @@ export function AvailabilityForm({ alumniId }: AvailabilityFormProps) {
             htmlFor="endTime"
             className="block text-sm font-medium text-[var(--foreground)] mb-1"
           >
-            End Time
+            Horário de Término
           </label>
           <input
             type="time"
@@ -128,7 +128,7 @@ export function AvailabilityForm({ alumniId }: AvailabilityFormProps) {
         disabled={isSubmitting}
         className="bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {isSubmitting ? "Adding..." : "Add Availability"}
+        {isSubmitting ? "Adicionando..." : "Adicionar Disponibilidade"}
       </button>
     </form>
   );

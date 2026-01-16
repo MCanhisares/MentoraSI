@@ -33,6 +33,9 @@ export function BookingCalendar() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
   const [email, setEmail] = useState("");
+  const [studentName, setStudentName] = useState("");
+  const [studentLinkedin, setStudentLinkedin] = useState("");
+  const [studentNotes, setStudentNotes] = useState("");
   const [isBooking, setIsBooking] = useState(false);
   const [bookingError, setBookingError] = useState("");
   const [bookingSuccess, setBookingSuccess] = useState(false);
@@ -82,7 +85,7 @@ export function BookingCalendar() {
 
   const handleBook = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedSlot || !email) return;
+    if (!selectedSlot || !email || !studentName) return;
 
     setIsBooking(true);
     setBookingError("");
@@ -97,6 +100,9 @@ export function BookingCalendar() {
           start_time: selectedSlot.start_time,
           end_time: selectedSlot.end_time,
           student_email: email,
+          student_name: studentName,
+          student_linkedin: studentLinkedin || null,
+          student_notes: studentNotes || null,
         }),
       });
 
@@ -110,6 +116,9 @@ export function BookingCalendar() {
       setSelectedSlot(null);
       setSelectedDate(null);
       setEmail("");
+      setStudentName("");
+      setStudentLinkedin("");
+      setStudentNotes("");
       fetchSlots();
     } catch (error) {
       setBookingError(
@@ -134,7 +143,7 @@ export function BookingCalendar() {
   if (loading) {
     return (
       <div className="bg-[var(--card-bg)] p-8 rounded-xl border border-[var(--card-border)] text-center">
-        <p className="text-[var(--muted)]">Loading available slots...</p>
+        <p className="text-[var(--muted)]">Carregando horários disponíveis...</p>
       </div>
     );
   }
@@ -158,16 +167,16 @@ export function BookingCalendar() {
           </svg>
         </div>
         <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">
-          Session Booked!
+          Sessão Agendada!
         </h2>
         <p className="text-[var(--muted)] mb-6">
-          Check your email for confirmation details and the meeting link.
+          Verifique seu e-mail para detalhes de confirmação e o link da reunião.
         </p>
         <button
           onClick={() => setBookingSuccess(false)}
           className="text-primary-500 hover:text-primary-700"
         >
-          Book another session
+          Agendar outra sessão
         </button>
       </div>
     );
@@ -177,7 +186,7 @@ export function BookingCalendar() {
     return (
       <div className="bg-[var(--card-bg)] p-8 rounded-xl border border-[var(--card-border)] text-center">
         <p className="text-[var(--muted)]">
-          No available slots at the moment. Please check back later.
+          Nenhum horário disponível no momento. Por favor, verifique mais tarde.
         </p>
       </div>
     );
@@ -215,7 +224,7 @@ export function BookingCalendar() {
 
         {/* Day Labels */}
         <div className="grid grid-cols-7 gap-1 mb-2">
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+          {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((day) => (
             <div key={day} className="text-center text-sm font-medium text-[var(--muted)] py-2">
               {day}
             </div>
@@ -261,11 +270,11 @@ export function BookingCalendar() {
         <div className="flex items-center gap-4 mt-4 pt-4 border-t border-[var(--card-border)]">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-primary-500" />
-            <span className="text-sm text-[var(--muted)]">Available slots</span>
+            <span className="text-sm text-[var(--muted)]">Horários disponíveis</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded ring-1 ring-primary-500" />
-            <span className="text-sm text-[var(--muted)]">Today</span>
+            <span className="text-sm text-[var(--muted)]">Hoje</span>
           </div>
         </div>
       </div>
@@ -302,7 +311,7 @@ export function BookingCalendar() {
               ))}
             </div>
           ) : (
-            <p className="text-[var(--muted)]">No available slots for this date.</p>
+            <p className="text-[var(--muted)]">Nenhum horário disponível para esta data.</p>
           )}
         </div>
       )}
@@ -311,12 +320,12 @@ export function BookingCalendar() {
       {selectedSlot && (
         <div className="bg-[var(--card-bg)] p-6 rounded-xl border border-[var(--card-border)]">
           <h2 className="text-xl font-semibold text-[var(--foreground)] mb-4">
-            Confirm Your Booking
+            Confirme seu Agendamento
           </h2>
 
           <div className="bg-primary-50 p-4 rounded-lg mb-6">
             <p className="text-primary-700">
-              <strong>Selected:</strong>{" "}
+              <strong>Selecionado:</strong>{" "}
               {format(parseISO(selectedSlot.date), "EEEE, MMMM d, yyyy")} at{" "}
               {selectedSlot.start_time.slice(0, 5)} -{" "}
               {selectedSlot.end_time.slice(0, 5)}
@@ -330,26 +339,80 @@ export function BookingCalendar() {
           )}
 
           <form onSubmit={handleBook} className="space-y-4">
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  htmlFor="studentName"
+                  className="block text-sm font-medium text-[var(--foreground)] mb-1"
+                >
+                  Seu Nome <span className="text-[var(--error-text)]">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="studentName"
+                  value={studentName}
+                  onChange={(e) => setStudentName(e.target.value)}
+                  required
+                  placeholder="João Silva"
+                  className="w-full border border-[var(--card-border)] bg-[var(--surface-2)] rounded-lg px-4 py-2 text-[var(--foreground)] placeholder-[var(--muted)] focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-[var(--foreground)] mb-1"
+                >
+                  Seu E-mail <span className="text-[var(--error-text)]">*</span>
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  placeholder="estudante@universidade.edu"
+                  className="w-full border border-[var(--card-border)] bg-[var(--surface-2)] rounded-lg px-4 py-2 text-[var(--foreground)] placeholder-[var(--muted)] focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                />
+              </div>
+            </div>
+
             <div>
               <label
-                htmlFor="email"
+                htmlFor="studentLinkedin"
                 className="block text-sm font-medium text-[var(--foreground)] mb-1"
               >
-                Your Email Address
+                LinkedIn <span className="text-[var(--muted)]">(opcional)</span>
               </label>
               <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="student@university.edu"
+                type="url"
+                id="studentLinkedin"
+                value={studentLinkedin}
+                onChange={(e) => setStudentLinkedin(e.target.value)}
+                placeholder="https://linkedin.com/in/seu-perfil"
                 className="w-full border border-[var(--card-border)] bg-[var(--surface-2)] rounded-lg px-4 py-2 text-[var(--foreground)] placeholder-[var(--muted)] focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               />
-              <p className="text-xs text-[var(--muted)] mt-1">
-                You will receive a confirmation email with the meeting link.
-              </p>
             </div>
+
+            <div>
+              <label
+                htmlFor="studentNotes"
+                className="block text-sm font-medium text-[var(--foreground)] mb-1"
+              >
+                O que você gostaria de discutir? <span className="text-[var(--muted)]">(opcional)</span>
+              </label>
+              <textarea
+                id="studentNotes"
+                value={studentNotes}
+                onChange={(e) => setStudentNotes(e.target.value)}
+                placeholder="Conte um pouco sobre você e o que espera dessa mentoria..."
+                rows={3}
+                className="w-full border border-[var(--card-border)] bg-[var(--surface-2)] rounded-lg px-4 py-2 text-[var(--foreground)] placeholder-[var(--muted)] focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
+              />
+            </div>
+
+            <p className="text-xs text-[var(--muted)]">
+              Você receberá um e-mail de confirmação com o link da reunião e opções para reagendar ou cancelar.
+            </p>
 
             <div className="flex gap-3">
               <button
@@ -357,14 +420,14 @@ export function BookingCalendar() {
                 onClick={() => setSelectedSlot(null)}
                 className="px-6 py-2 border border-[var(--card-border)] rounded-lg text-[var(--foreground)] hover:bg-[var(--surface-3)] transition-colors"
               >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={isBooking}
-                className="flex-1 bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isBooking ? "Booking..." : "Confirm Booking"}
+                 Cancelar
+               </button>
+               <button
+                 type="submit"
+                 disabled={isBooking}
+                 className="flex-1 bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+               >
+                 {isBooking ? "Agendando..." : "Confirmar Agendamento"}
               </button>
             </div>
           </form>

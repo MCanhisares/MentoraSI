@@ -22,19 +22,19 @@ export default function BookingConfirmPage() {
           </div>
 
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Session Booked!
+            Sessão Agendada!
           </h1>
           <p className="text-gray-600 mb-6">
-            Your mentoring session has been confirmed. Check your email for the
-            meeting details and calendar invite.
+            Sua sessão de mentoria foi confirmada. Verifique seu e-mail para os
+            detalhes da reunião e convite do calendário.
           </p>
 
           <div className="bg-primary-50 p-4 rounded-lg mb-6 text-left">
-            <h2 className="font-medium text-primary-800 mb-2">What happens next?</h2>
+            <h2 className="font-medium text-primary-800 mb-2">O que acontece a seguir?</h2>
             <ul className="text-sm text-primary-700 space-y-1">
-              <li>1. You will receive a confirmation email</li>
-              <li>2. A calendar invite will be sent to your email</li>
-              <li>3. Join the meeting at the scheduled time</li>
+              <li>1. Você receberá um e-mail de confirmação</li>
+              <li>2. Um convite do calendário será enviado para seu e-mail</li>
+              <li>3. Entre na reunião no horário agendado</li>
             </ul>
           </div>
 
@@ -43,13 +43,13 @@ export default function BookingConfirmPage() {
               href="/book"
               className="block w-full bg-primary-600 text-white text-center px-4 py-3 rounded-lg hover:bg-primary-700 transition-colors"
             >
-              Book Another Session
+              Agendar Outra Sessão
             </Link>
             <Link
               href="/"
               className="block text-primary-600 hover:text-primary-800"
             >
-              Back to Home
+              Voltar ao Início
             </Link>
           </div>
         </div>
