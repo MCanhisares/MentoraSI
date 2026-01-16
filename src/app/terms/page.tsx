@@ -1,9 +1,9 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 
 export const metadata = {
   title: "Termos de Serviço - MentoraSI",
-  description: "Termos de Serviço para a plataforma de mentoria anônima de ex-alunos MentoraSI",
+  description: "Termos de Serviço para a plataforma de mentoria de alunos MentoraSI",
 };
 
 export default function TermsOfServicePage() {
@@ -46,10 +46,9 @@ export default function TermsOfServicePage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-[var(--foreground)] mb-4">2. Descrição do Serviço</h2>
             <p className="text-[var(--muted)]">
-              MentoraSI é uma plataforma de mentoria anônima que conecta estudantes
+              MentoraSI é uma plataforma de mentoria que conecta estudantes
               universitários com mentores ex-alunos. A plataforma permite que ex-alunos definam sua
-              disponibilidade e estudantes agendem sessões de mentoria sem saber
-              a identidade do mentor previamente.
+              disponibilidade e estudantes agendem sessões de mentoria.
             </p>
           </section>
 

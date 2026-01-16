@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MentoraSI - Mentoria Anônima de Ex-Alunos da USP",
-  description: "Conecte estudantes daUSP com ex-alunos mentores. Agende sessões de mentoria anônimas para receber orientação profissional e desenvolvimento de carreira.",
-  keywords: ["mentoria", "ex-alunos", "USP" , "carreira", "orientação profissional", "estudantes", "mentoria anônima"],
+  title: "MentoraSI - Mentoria para alunos da USP",
+  description: "Conecte estudantes daUSP com ex-alunos mentores. Agende sessões de mentoria para receber orientação profissional e desenvolvimento de carreira.",
+  keywords: ["mentoria", "ex-alunos", "USP" , "carreira", "orientação profissional", "estudantes"],
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
@@ -26,8 +26,8 @@ export const metadata: Metadata = {
   },
   manifest: "/site.webmanifest",
   openGraph: {
-    title: "MentoraSI - Mentoria Anônima de Ex-Alunos da USP",
-    description: "Plataforma que conecta estudantes da USP com ex-alunos experientes. Agende sessões de mentoria anônimas para receber orientação profissional, conselhos de carreira e desenvolvimento pessoal sem preconceitos.",
+    title: "MentoraSI - Mentoria para alunos da USP",
+    description: "Plataforma que conecta estudantes da USP com ex-alunos experientes. Agende sessões de mentoria para receber orientação profissional, conselhos de carreira e desenvolvimento pessoal.",
     url: "https://mentorasi.com",
     siteName: "MentoraSI",
     locale: "pt_BR",
@@ -37,14 +37,14 @@ export const metadata: Metadata = {
         url: "https://mentorasi.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "MentoraSI - Mentoria Anônima de Ex-Alunos da USP"
+        alt: "MentoraSI - Mentoria para alunos da USP"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "MentoraSI - Mentoria Anônima de Ex-Alunos da USP",
-    description: "Conecte estudantes da USP com ex-alunos mentores para orientação profissional anônima.",
+    title: "MentoraSI - Mentoria para alunos da USP",
+    description: "Conecte estudantes da USP com ex-alunos mentores para orientação profissional.",
     images: ["https://mentorasi.com/twitter-image.jpg"]
   }
 };

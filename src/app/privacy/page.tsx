@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export const metadata = {
   title: "Política de Privacidade - MentoraSI",
-  description: "Política de Privacidade para a plataforma de mentoria anônima de ex-alunos MentoraSI",
+  description: "Política de Privacidade para a plataforma de mentoria MentoraSI",
 };
 
 export default function PrivacyPolicyPage() {
@@ -39,7 +39,7 @@ export default function PrivacyPolicyPage() {
             <p className="text-[var(--muted)] mb-4">
               MentoraSI (&quot;nós&quot;, &quot;nosso&quot; ou &quot;da nossa&quot;) está comprometida em proteger sua privacidade.
               Esta Política de Privacidade explica como coletamos, usamos, divulgamos e protegemos suas
-              informações quando você usa nossa plataforma de mentoria anônima de ex-alunos.
+              informações quando você usa nossa plataforma de mentoria de alunos.
             </p>
           </section>
 
@@ -70,11 +70,8 @@ export default function PrivacyPolicyPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-[var(--foreground)] mb-4">3. Como Usamos Suas Informações</h2>
             <ul className="list-disc pl-6 text-[var(--muted)] space-y-2">
-              <li>Para facilitar agendamentos de sessões de mentoria anônima</li>
               <li>Para criar eventos de calendário para sessões agendadas</li>
               <li>Para enviar confirmações e lembretes de agendamento via e-mail</li>
-              <li>Para manter e melhorar nossa plataforma</li>
-              <li>Para comunicar atualizações importantes sobre nosso serviço</li>
             </ul>
           </section>
 
@@ -109,16 +106,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-[var(--foreground)] mb-4">6. Anonimato</h2>
-            <p className="text-[var(--muted)]">
-              Nossa plataforma é projetada para fornecer agendamentos anônimos. Estudantes não podem ver
-              com qual mentor ex-aluno se encontrarão até a sessão. As identidades dos ex-alunos não
-              são exibidas na interface de agendamento.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-[var(--foreground)] mb-4">7. Segurança de Dados</h2>
+            <h2 className="text-2xl font-semibold text-[var(--foreground)] mb-4">6. Segurança de Dados</h2>
             <p className="text-[var(--muted)]">
               Implementamos medidas técnicas e organizacionais apropriadas para proteger
               suas informações pessoais. No entanto, nenhum método de transmissão pela
@@ -127,7 +115,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-[var(--foreground)] mb-4">8. Retenção de Dados</h2>
+            <h2 className="text-2xl font-semibold text-[var(--foreground)] mb-4">7. Retenção de Dados</h2>
             <p className="text-[var(--muted)]">
               Mantemos suas informações enquanto sua conta está ativa ou conforme
               necessário para fornecer serviços. Você pode solicitar a exclusão de seus dados entrando
@@ -136,7 +124,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-[var(--foreground)] mb-4">9. Seus Direitos</h2>
+            <h2 className="text-2xl font-semibold text-[var(--foreground)] mb-4">8. Seus Direitos</h2>
             <p className="text-[var(--muted)] mb-4">Você tem o direito de:</p>
             <ul className="list-disc pl-6 text-[var(--muted)] space-y-2">
               <li>Acessar seus dados pessoais</li>
@@ -147,7 +135,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-[var(--foreground)] mb-4">10. Alterações nesta Política</h2>
+            <h2 className="text-2xl font-semibold text-[var(--foreground)] mb-4">9. Alterações nesta Política</h2>
             <p className="text-[var(--muted)]">
               Podemos atualizar esta Política de Privacidade de tempos em tempos. Iremos notificá-lo
               de quaisquer alterações postando a nova política nesta página e atualizando a
@@ -156,11 +144,11 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-[var(--foreground)] mb-4">11. Contato</h2>
+            <h2 className="text-2xl font-semibold text-[var(--foreground)] mb-4">10. Contato</h2>
             <p className="text-[var(--muted)]">
               Se você tiver dúvidas sobre esta Política de Privacidade, entre em contato conosco em:{" "}
               <a href="mailto:support@mentorasi.com" className="text-[var(--primary-500)] hover:underline">
-                support@mentorasi.com
+                support@mentorasi.com.br
               </a>
             </p>
           </section>
