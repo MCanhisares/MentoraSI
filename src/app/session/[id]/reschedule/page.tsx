@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { SimpleHeader } from "@/components/SimpleHeader";
 import {
   format,
   startOfMonth,
@@ -39,7 +40,7 @@ interface Slot {
   start_time: string;
   end_time: string;
   booking_key: string;
-  slot_id: string;
+  slot_id: string | null;
 }
 
 export default function RescheduleSessionPage() {
@@ -127,13 +128,10 @@ export default function RescheduleSessionPage() {
   }, [currentMonth]);
 
   const handleReschedule = async () => {
-    if (!token || !selectedSlot) return;
+    if (!token || !selectedSlot || !selectedSlot.slot_id) return;
 
     setRescheduling(true);
     try {
-      // Decode booking key to get slot_id
-      const slotInfo = JSON.parse(Buffer.from(selectedSlot.booking_key, "base64").toString());
-
       const response = await fetch(`/api/sessions/${sessionId}/reschedule`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -142,7 +140,7 @@ export default function RescheduleSessionPage() {
           new_date: selectedSlot.date,
           new_start_time: selectedSlot.start_time,
           new_end_time: selectedSlot.end_time,
-          new_slot_id: slotInfo.slot_id,
+          new_slot_id: selectedSlot.slot_id,
         }),
       });
 
@@ -261,13 +259,7 @@ export default function RescheduleSessionPage() {
 
   return (
     <main className="min-h-screen bg-[var(--background)]">
-      <nav className="bg-[var(--card-bg)] border-b border-[var(--card-border)] px-6 py-4">
-        <div className="max-w-7xl mx-auto">
-          <Link href="/" className="text-2xl font-bold text-primary-500">
-            MentoraSI
-          </Link>
-        </div>
-      </nav>
+      <SimpleHeader />
 
       <div className="max-w-4xl mx-auto px-6 py-8">
         <div className="mb-8">

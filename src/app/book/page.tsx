@@ -1,31 +1,21 @@
-import Link from "next/link";
+import { Header } from "@/components/Header";
 import { BookingCalendar } from "@/components/BookingCalendar";
 
 export default function BookPage() {
   return (
-    <main className="min-h-screen bg-[var(--background)]">
-      <nav className="bg-[var(--card-bg)] border-b border-[var(--card-border)] px-6 py-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold text-primary-500">
-            MentoraSI
-          </Link>
-          <Link
-            href="/alumni/login"
-            className="text-primary-500 hover:text-primary-700 font-medium"
-          >
-            Login de Ex-Alunos
-          </Link>
-        </div>
-      </nav>
+    <main className="min-h-screen bg-[var(--background)] relative">
+      {/* Background gradient */}
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[100px]" />
 
-      <div className="max-w-4xl mx-auto px-6 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-[var(--foreground)] mb-2">
-            Agendar uma Sessão de Mentoria
+      <Header />
+
+      <div className="relative max-w-4xl mx-auto px-6 py-12">
+        <div className="text-center mb-10">
+          <h1 className="text-3xl md:text-4xl font-bold text-[var(--foreground)] mb-3">
+            Agendar Mentoria
           </h1>
-          <p className="text-[var(--muted)]">
-            Selecione um horário disponível para agendar uma sessão anônima com um
-            mentor ex-aluno. Você não saberá com quem está se encontrando até a sessão.
+          <p className="text-[var(--muted)] max-w-lg mx-auto">
+            Escolha um horário disponível. Você será conectado com um mentor ex-aluno de Sistemas de Informação.
           </p>
         </div>
 

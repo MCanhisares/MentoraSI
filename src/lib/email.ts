@@ -38,8 +38,8 @@ export async function sendBookingConfirmationToStudent(
 
   const { studentName, date, startTime, endTime, meetingLink, sessionId, managementToken, baseUrl } = sessionDetails;
 
-  const rescheduleLink = `${baseUrl}/sessao/${sessionId}/reagendar?token=${managementToken}`;
-  const cancelLink = `${baseUrl}/sessao/${sessionId}/cancelar?token=${managementToken}`;
+  const rescheduleLink = `${baseUrl}/session/${sessionId}/reschedule?token=${managementToken}`;
+  const cancelLink = `${baseUrl}/session/${sessionId}/cancel?token=${managementToken}`;
 
   const result = await resend.emails.send({
     from: getFromAddress(),
@@ -112,7 +112,7 @@ export async function sendBookingNotificationToAlumni(
     baseUrl,
   } = sessionDetails;
 
-  const cancelLink = `${baseUrl}/sessao/${sessionId}/cancelar?token=${managementToken}`;
+  const cancelLink = `${baseUrl}/session/${sessionId}/cancel?token=${managementToken}`;
 
   const result = await resend.emails.send({
     from: getFromAddress(),

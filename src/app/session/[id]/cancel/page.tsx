@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { SimpleHeader } from "@/components/SimpleHeader";
 
 interface SessionData {
   id: string;
@@ -177,13 +178,7 @@ export default function CancelSessionPage() {
 
   return (
     <main className="min-h-screen bg-[var(--background)]">
-      <nav className="bg-[var(--card-bg)] border-b border-[var(--card-border)] px-6 py-4">
-        <div className="max-w-7xl mx-auto">
-          <Link href="/" className="text-2xl font-bold text-primary-500">
-            MentoraSI
-          </Link>
-        </div>
-      </nav>
+      <SimpleHeader />
 
       <div className="max-w-lg mx-auto px-6 py-12">
         <div className="bg-[var(--card-bg)] p-8 rounded-xl border border-[var(--card-border)]">

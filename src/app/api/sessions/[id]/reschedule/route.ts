@@ -121,8 +121,8 @@ export async function POST(
         ? `http://${request.headers.get("host")}`
         : `https://${request.headers.get("host")}`);
 
-    const rescheduleLink = `${baseUrl}/sessao/${session.id}/reagendar?token=${session.management_token}`;
-    const cancelLink = `${baseUrl}/sessao/${session.id}/cancelar?token=${session.management_token}`;
+    const rescheduleLink = `${baseUrl}/session/${session.id}/reschedule?token=${session.management_token}`;
+    const cancelLink = `${baseUrl}/session/${session.id}/cancel?token=${session.management_token}`;
 
     // Update the existing Google Calendar event (instead of delete+create)
     let meetingLink = session.meeting_link;

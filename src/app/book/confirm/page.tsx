@@ -2,12 +2,15 @@ import Link from "next/link";
 
 export default function BookingConfirmPage() {
   return (
-    <main className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="max-w-md w-full mx-4">
-        <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+    <main className="min-h-screen bg-[var(--background)] flex items-center justify-center relative overflow-hidden">
+      {/* Background gradient */}
+      <div className="absolute top-1/3 left-1/3 w-[400px] h-[400px] bg-purple-600/15 rounded-full blur-[100px]" />
+
+      <div className="relative max-w-md w-full mx-4">
+        <div className="glass p-8 rounded-2xl text-center">
+          <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
             <svg
-              className="w-8 h-8 text-green-600"
+              className="w-8 h-8 text-green-500"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -21,35 +24,43 @@ export default function BookingConfirmPage() {
             </svg>
           </div>
 
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          <h1 className="text-2xl font-bold text-[var(--foreground)] mb-2">
             Sessão Agendada!
           </h1>
-          <p className="text-gray-600 mb-6">
-            Sua sessão de mentoria foi confirmada. Verifique seu e-mail para os
-            detalhes da reunião e convite do calendário.
+          <p className="text-[var(--muted)] mb-8">
+            Sua mentoria foi confirmada. Verifique seu e-mail para os detalhes.
           </p>
 
-          <div className="bg-primary-50 p-4 rounded-lg mb-6 text-left">
-            <h2 className="font-medium text-primary-800 mb-2">O que acontece a seguir?</h2>
-            <ul className="text-sm text-primary-700 space-y-1">
-              <li>1. Você receberá um e-mail de confirmação</li>
-              <li>2. Um convite do calendário será enviado para seu e-mail</li>
-              <li>3. Entre na reunião no horário agendado</li>
+          <div className="bg-[var(--surface-2)] p-4 rounded-xl mb-8 text-left border border-[var(--card-border)]">
+            <h2 className="font-medium text-[var(--foreground)] mb-3">Próximos passos:</h2>
+            <ul className="text-sm text-[var(--muted)] space-y-2">
+              <li className="flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-[var(--primary-500)]/20 text-[var(--primary-500)] text-xs flex items-center justify-center">1</span>
+                E-mail de confirmação enviado
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-[var(--primary-500)]/20 text-[var(--primary-500)] text-xs flex items-center justify-center">2</span>
+                Convite do calendário incluído
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-[var(--primary-500)]/20 text-[var(--primary-500)] text-xs flex items-center justify-center">3</span>
+                Entre na reunião no horário
+              </li>
             </ul>
           </div>
 
           <div className="space-y-3">
             <Link
               href="/book"
-              className="block w-full bg-primary-600 text-white text-center px-4 py-3 rounded-lg hover:bg-primary-700 transition-colors"
+              className="gradient-btn block w-full text-white text-center px-4 py-3 rounded-xl font-medium"
             >
               Agendar Outra Sessão
             </Link>
             <Link
               href="/"
-              className="block text-primary-600 hover:text-primary-800"
+              className="block text-[var(--muted)] hover:text-[var(--primary-500)] transition-colors text-sm"
             >
-              Voltar ao Início
+              ← Voltar ao Início
             </Link>
           </div>
         </div>

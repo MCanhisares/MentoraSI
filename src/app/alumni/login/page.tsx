@@ -1,29 +1,43 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getAuthUrl } from "@/lib/google";
 
 export default function AlumniLoginPage() {
   const googleAuthUrl = getAuthUrl();
 
   return (
-    <main className="min-h-screen bg-[var(--background)] flex items-center justify-center">
-      <div className="max-w-md w-full mx-4">
+    <main className="min-h-screen bg-[var(--background)] flex items-center justify-center relative overflow-hidden">
+      {/* Background gradient */}
+      <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-purple-600/15 rounded-full blur-[100px]" />
+      <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] bg-indigo-600/15 rounded-full blur-[80px]" />
+
+      <div className="relative max-w-md w-full mx-4">
         <div className="text-center mb-8">
-          <Link href="/" className="text-2xl font-bold text-primary-500">
-            MentoraSI
+          <Link href="/" className="inline-flex items-center gap-3 group">
+            <Image
+              src="/logo.png"
+              alt="MentoraSI"
+              width={44}
+              height={44}
+              className="rounded-lg"
+            />
+            <span className="text-2xl font-semibold text-[var(--foreground)] group-hover:text-[var(--primary-500)] transition-colors">
+              MentoraSI
+            </span>
           </Link>
         </div>
 
-        <div className="bg-[var(--card-bg)] p-8 rounded-xl border border-[var(--card-border)]">
+        <div className="glass p-8 rounded-2xl">
           <h1 className="text-2xl font-bold text-[var(--foreground)] mb-2 text-center">
-            Login de Ex-Alunos
+            Área do Mentor
           </h1>
-          <p className="text-[var(--muted)] text-center mb-8">
+          <p className="text-[var(--muted)] text-center mb-8 text-sm">
             Entre com o Google para gerenciar sua disponibilidade e conectar seu calendário.
           </p>
 
           <a
             href={googleAuthUrl}
-            className="flex items-center justify-center gap-3 w-full bg-[var(--surface-2)] border-2 border-[var(--card-border)] rounded-lg px-6 py-3 text-[var(--foreground)] font-medium hover:bg-[var(--surface-3)] hover:border-[var(--muted-foreground)] transition-colors"
+            className="flex items-center justify-center gap-3 w-full bg-white text-gray-800 rounded-xl px-6 py-3.5 font-medium hover:bg-gray-50 transition-all hover:shadow-lg"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
@@ -46,22 +60,21 @@ export default function AlumniLoginPage() {
             Continuar com Google
           </a>
 
-          <p className="text-xs text-[var(--muted)] text-center mt-6">
+          <p className="text-xs text-[var(--muted)] text-center mt-6 leading-relaxed">
             Ao entrar, você concorda com nossos{" "}
-            <Link href="/terms" className="text-primary-500 hover:text-primary-700">
-              Termos de Serviço
+            <Link href="/terms" className="text-[var(--primary-500)] hover:underline">
+              Termos
             </Link>{" "}
             e{" "}
-            <Link href="/privacy" className="text-primary-500 hover:text-primary-700">
-              Política de Privacidade
+            <Link href="/privacy" className="text-[var(--primary-500)] hover:underline">
+              Privacidade
             </Link>
-            , e em conectar seu Google Calendar para agendamento automático de sessões.
           </p>
         </div>
 
-        <p className="text-center mt-6 text-[var(--muted)]">
-          <Link href="/" className="text-primary-500 hover:text-primary-700">
-            Voltar ao Início
+        <p className="text-center mt-8">
+          <Link href="/" className="text-sm text-[var(--muted)] hover:text-[var(--primary-500)] transition-colors">
+            ← Voltar ao Início
           </Link>
         </p>
       </div>

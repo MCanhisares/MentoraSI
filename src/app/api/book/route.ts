@@ -187,8 +187,8 @@ export async function POST(request: NextRequest) {
         ? `http://${request.headers.get("host")}`
         : `https://${request.headers.get("host")}`);
 
-    const rescheduleLink = `${baseUrl}/sessao/${session?.id}/reagendar?token=${managementToken}`;
-    const cancelLink = `${baseUrl}/sessao/${session?.id}/cancelar?token=${managementToken}`;
+    const rescheduleLink = `${baseUrl}/session/${session?.id}/reschedule?token=${managementToken}`;
+    const cancelLink = `${baseUrl}/session/${session?.id}/cancel?token=${managementToken}`;
 
     let googleEventId: string | null = null;
     let meetingLink: string | null = null;

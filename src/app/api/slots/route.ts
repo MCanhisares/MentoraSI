@@ -175,6 +175,9 @@ export async function GET(request: NextRequest) {
     date: slotData.date,
     start_time: slotData.start_time,
     end_time: slotData.end_time,
+    // Include slot_id for reschedule scenarios (when filtered by alumni_id)
+    // Use the first available slot_id since they all cover the same time
+    slot_id: slotData.available_alumni[0]?.slot_id || null,
     // Don't expose alumni info - booking API will find available alumni
     booking_key: Buffer.from(
       JSON.stringify({
