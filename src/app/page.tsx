@@ -2,12 +2,12 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-primary-50 to-white">
+    <main className="min-h-screen bg-[var(--background)]">
       <nav className="px-6 py-4 flex justify-between items-center max-w-7xl mx-auto">
-        <h1 className="text-2xl font-bold text-primary-700">MentorMatch</h1>
+        <h1 className="text-2xl font-bold text-primary-500">MentorMatch</h1>
         <Link
           href="/alumni/login"
-          className="text-primary-600 hover:text-primary-800 font-medium"
+          className="text-primary-500 hover:text-primary-700 font-medium"
         >
           Alumni Login
         </Link>
@@ -15,10 +15,10 @@ export default function Home() {
 
       <div className="max-w-7xl mx-auto px-6 py-20">
         <div className="text-center">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-5xl font-bold text-[var(--foreground)] mb-6">
             Anonymous Alumni Mentoring
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-10">
+          <p className="text-xl text-[var(--muted)] max-w-2xl mx-auto mb-10">
             Get career guidance from experienced alumni. Book sessions anonymously
             - focus on the advice, not the names.
           </p>
@@ -32,7 +32,7 @@ export default function Home() {
             </Link>
             <Link
               href="/alumni/login"
-              className="border-2 border-primary-600 text-primary-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-primary-50 transition-colors"
+              className="border-2 border-primary-500 text-primary-500 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-[var(--surface-2)] transition-colors"
             >
               Become a Mentor
             </Link>
@@ -40,10 +40,10 @@ export default function Home() {
         </div>
 
         <div className="mt-24 grid md:grid-cols-3 gap-8">
-          <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-            <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
+          <div className="bg-[var(--card-bg)] p-8 rounded-xl border border-[var(--card-border)]">
+            <div className="w-12 h-12 bg-primary-50 rounded-lg flex items-center justify-center mb-4">
               <svg
-                className="w-6 h-6 text-primary-600"
+                className="w-6 h-6 text-primary-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -56,19 +56,19 @@ export default function Home() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">
               Anonymous Booking
             </h3>
-            <p className="text-gray-600">
+            <p className="text-[var(--muted)]">
               Book sessions without knowing who you will meet. Focus purely on
               getting valuable advice.
             </p>
           </div>
 
-          <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-            <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
+          <div className="bg-[var(--card-bg)] p-8 rounded-xl border border-[var(--card-border)]">
+            <div className="w-12 h-12 bg-primary-50 rounded-lg flex items-center justify-center mb-4">
               <svg
-                className="w-6 h-6 text-primary-600"
+                className="w-6 h-6 text-primary-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -81,19 +81,19 @@ export default function Home() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">
               Flexible Scheduling
             </h3>
-            <p className="text-gray-600">
+            <p className="text-[var(--muted)]">
               Alumni set their availability. Students pick from aggregated time
               slots that work for them.
             </p>
           </div>
 
-          <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-            <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
+          <div className="bg-[var(--card-bg)] p-8 rounded-xl border border-[var(--card-border)]">
+            <div className="w-12 h-12 bg-primary-50 rounded-lg flex items-center justify-center mb-4">
               <svg
-                className="w-6 h-6 text-primary-600"
+                className="w-6 h-6 text-primary-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -106,10 +106,10 @@ export default function Home() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">
               Instant Calendar Sync
             </h3>
-            <p className="text-gray-600">
+            <p className="text-[var(--muted)]">
               Sessions automatically appear in Google Calendar. No manual
               coordination needed.
             </p>
@@ -117,13 +117,13 @@ export default function Home() {
         </div>
       </div>
 
-      <footer className="py-8 text-center text-gray-500 text-sm border-t border-gray-100">
+      <footer className="py-8 text-center text-[var(--muted)] text-sm border-t border-[var(--card-border)]">
         <p className="mb-4">Connect students with alumni mentors anonymously</p>
         <div className="flex justify-center gap-6">
-          <Link href="/privacy" className="hover:text-gray-700">
+          <Link href="/privacy" className="hover:text-[var(--foreground)]">
             Privacy Policy
           </Link>
-          <Link href="/terms" className="hover:text-gray-700">
+          <Link href="/terms" className="hover:text-[var(--foreground)]">
             Terms of Service
           </Link>
         </div>

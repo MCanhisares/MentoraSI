@@ -48,58 +48,58 @@ export default async function AlumniDashboardPage() {
     .eq("alumni_id", alumniId);
 
   return (
-    <main className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b border-gray-200 px-6 py-4">
+    <main className="min-h-screen bg-[var(--background)]">
+      <nav className="bg-[var(--card-bg)] border-b border-[var(--card-border)] px-6 py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold text-primary-700">
+          <Link href="/" className="text-2xl font-bold text-primary-500">
             MentorMatch
           </Link>
           <div className="flex items-center gap-4">
-            <span className="text-gray-600">{alumni.name || alumni.email}</span>
+            <span className="text-[var(--muted)]">{alumni.name || alumni.email}</span>
             <LogoutButton />
           </div>
         </div>
       </nav>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Dashboard</h1>
+        <h1 className="text-3xl font-bold text-[var(--foreground)] mb-8">Dashboard</h1>
 
         <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="text-sm font-medium text-gray-500 mb-1">
+          <div className="bg-[var(--card-bg)] p-6 rounded-xl border border-[var(--card-border)]">
+            <h3 className="text-sm font-medium text-[var(--muted)] mb-1">
               Availability Slots
             </h3>
-            <p className="text-3xl font-bold text-gray-900">{slotsCount || 0}</p>
+            <p className="text-3xl font-bold text-[var(--foreground)]">{slotsCount || 0}</p>
             <Link
               href="/alumni/availability"
-              className="text-primary-600 text-sm hover:text-primary-800 mt-2 inline-block"
+              className="text-primary-500 text-sm hover:text-primary-700 mt-2 inline-block"
             >
               Manage availability
             </Link>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="text-sm font-medium text-gray-500 mb-1">
+          <div className="bg-[var(--card-bg)] p-6 rounded-xl border border-[var(--card-border)]">
+            <h3 className="text-sm font-medium text-[var(--muted)] mb-1">
               Upcoming Sessions
             </h3>
-            <p className="text-3xl font-bold text-gray-900">
+            <p className="text-3xl font-bold text-[var(--foreground)]">
               {sessions?.length || 0}
             </p>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="text-sm font-medium text-gray-500 mb-1">
+          <div className="bg-[var(--card-bg)] p-6 rounded-xl border border-[var(--card-border)]">
+            <h3 className="text-sm font-medium text-[var(--muted)] mb-1">
               Calendar Status
             </h3>
-            <p className="text-lg font-medium text-green-600">
+            <p className="text-lg font-medium text-[var(--success-text)]">
               {alumni.google_refresh_token ? "Connected" : "Not Connected"}
             </p>
           </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          <div className="bg-[var(--card-bg)] p-6 rounded-xl border border-[var(--card-border)]">
+            <h2 className="text-xl font-semibold text-[var(--foreground)] mb-4">
               Quick Actions
             </h2>
             <div className="space-y-3">
@@ -112,8 +112,8 @@ export default async function AlumniDashboardPage() {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          <div className="bg-[var(--card-bg)] p-6 rounded-xl border border-[var(--card-border)]">
+            <h2 className="text-xl font-semibold text-[var(--foreground)] mb-4">
               Upcoming Sessions
             </h2>
             {sessions && sessions.length > 0 ? (
@@ -121,13 +121,13 @@ export default async function AlumniDashboardPage() {
                 {sessions.map((session) => (
                   <li
                     key={session.id}
-                    className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
+                    className="flex justify-between items-center p-3 bg-[var(--surface-2)] rounded-lg"
                   >
                     <div>
-                      <p className="font-medium text-gray-900">
+                      <p className="font-medium text-[var(--foreground)]">
                         {format(new Date(session.session_date), "MMM d, yyyy")}
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-[var(--muted)]">
                         {session.start_time} - {session.end_time}
                       </p>
                     </div>
@@ -136,7 +136,7 @@ export default async function AlumniDashboardPage() {
                         href={session.meeting_link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-primary-600 hover:text-primary-800 text-sm"
+                        className="text-primary-500 hover:text-primary-700 text-sm"
                       >
                         Join Meeting
                       </a>
@@ -145,7 +145,7 @@ export default async function AlumniDashboardPage() {
                 ))}
               </ul>
             ) : (
-              <p className="text-gray-500">No upcoming sessions</p>
+              <p className="text-[var(--muted)]">No upcoming sessions</p>
             )}
           </div>
         </div>

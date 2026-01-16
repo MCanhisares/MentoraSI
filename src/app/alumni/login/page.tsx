@@ -5,25 +5,25 @@ export default function AlumniLoginPage() {
   const googleAuthUrl = getAuthUrl();
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-primary-50 to-white flex items-center justify-center">
+    <main className="min-h-screen bg-[var(--background)] flex items-center justify-center">
       <div className="max-w-md w-full mx-4">
         <div className="text-center mb-8">
-          <Link href="/" className="text-2xl font-bold text-primary-700">
+          <Link href="/" className="text-2xl font-bold text-primary-500">
             MentorMatch
           </Link>
         </div>
 
-        <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2 text-center">
+        <div className="bg-[var(--card-bg)] p-8 rounded-xl border border-[var(--card-border)]">
+          <h1 className="text-2xl font-bold text-[var(--foreground)] mb-2 text-center">
             Alumni Login
           </h1>
-          <p className="text-gray-600 text-center mb-8">
+          <p className="text-[var(--muted)] text-center mb-8">
             Sign in with Google to manage your availability and connect your calendar.
           </p>
 
           <a
             href={googleAuthUrl}
-            className="flex items-center justify-center gap-3 w-full bg-white border-2 border-gray-200 rounded-lg px-6 py-3 text-gray-700 font-medium hover:bg-gray-50 hover:border-gray-300 transition-colors"
+            className="flex items-center justify-center gap-3 w-full bg-[var(--surface-2)] border-2 border-[var(--card-border)] rounded-lg px-6 py-3 text-[var(--foreground)] font-medium hover:bg-[var(--surface-3)] hover:border-[var(--muted-foreground)] transition-colors"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
@@ -46,21 +46,21 @@ export default function AlumniLoginPage() {
             Continue with Google
           </a>
 
-          <p className="text-xs text-gray-500 text-center mt-6">
+          <p className="text-xs text-[var(--muted)] text-center mt-6">
             By signing in, you agree to our{" "}
-            <Link href="/terms" className="text-primary-600 hover:text-primary-800">
+            <Link href="/terms" className="text-primary-500 hover:text-primary-700">
               Terms of Service
             </Link>{" "}
             and{" "}
-            <Link href="/privacy" className="text-primary-600 hover:text-primary-800">
+            <Link href="/privacy" className="text-primary-500 hover:text-primary-700">
               Privacy Policy
             </Link>
             , and to connect your Google Calendar for automatic session scheduling.
           </p>
         </div>
 
-        <p className="text-center mt-6 text-gray-600">
-          <Link href="/" className="text-primary-600 hover:text-primary-800">
+        <p className="text-center mt-6 text-[var(--muted)]">
+          <Link href="/" className="text-primary-500 hover:text-primary-700">
             Back to Home
           </Link>
         </p>

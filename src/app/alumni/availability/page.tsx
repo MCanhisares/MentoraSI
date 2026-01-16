@@ -40,20 +40,20 @@ export default async function AvailabilityPage() {
     .order("specific_date", { ascending: true }) as { data: AvailabilitySlot[] | null };
 
   return (
-    <main className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b border-gray-200 px-6 py-4">
+    <main className="min-h-screen bg-[var(--background)]">
+      <nav className="bg-[var(--card-bg)] border-b border-[var(--card-border)] px-6 py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold text-primary-700">
+          <Link href="/" className="text-2xl font-bold text-primary-500">
             MentorMatch
           </Link>
           <div className="flex items-center gap-4">
             <Link
               href="/alumni/dashboard"
-              className="text-gray-600 hover:text-gray-800"
+              className="text-[var(--muted)] hover:text-[var(--foreground)]"
             >
               Dashboard
             </Link>
-            <span className="text-gray-600">{alumni.name || alumni.email}</span>
+            <span className="text-[var(--muted)]">{alumni.name || alumni.email}</span>
             <LogoutButton />
           </div>
         </div>
@@ -61,10 +61,10 @@ export default async function AvailabilityPage() {
 
       <div className="max-w-4xl mx-auto px-6 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-[var(--foreground)] mb-2">
             Set Your Availability
           </h1>
-          <p className="text-gray-600">
+          <p className="text-[var(--muted)]">
             Define when you are available for mentoring sessions. Use the Weekly Schedule
             for recurring availability or Individual Dates for specific one-time slots.
           </p>

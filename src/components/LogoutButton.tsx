@@ -5,7 +5,7 @@ export function LogoutButton() {
     <form action="/api/auth/logout" method="POST">
       <button
         type="submit"
-        className="text-gray-600 hover:text-gray-800 text-sm"
+        className="text-[var(--muted)] hover:text-[var(--foreground)] text-sm"
       >
         Sign Out
       </button>

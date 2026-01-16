@@ -63,7 +63,7 @@ export function AvailabilityForm({ alumniId }: AvailabilityFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && (
-        <div className="bg-red-50 text-red-700 p-3 rounded-lg text-sm">
+        <div className="bg-[var(--error-bg)] text-[var(--error-text)] p-3 rounded-lg text-sm">
           {error}
         </div>
       )}
@@ -72,7 +72,7 @@ export function AvailabilityForm({ alumniId }: AvailabilityFormProps) {
         <div>
           <label
             htmlFor="dayOfWeek"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-[var(--foreground)] mb-1"
           >
             Day of Week
           </label>
@@ -80,7 +80,7 @@ export function AvailabilityForm({ alumniId }: AvailabilityFormProps) {
             id="dayOfWeek"
             value={dayOfWeek}
             onChange={(e) => setDayOfWeek(Number(e.target.value))}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full border border-[var(--card-border)] bg-[var(--surface-2)] text-[var(--foreground)] rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           >
             {DAYS_OF_WEEK.map((day) => (
               <option key={day.value} value={day.value}>
@@ -93,7 +93,7 @@ export function AvailabilityForm({ alumniId }: AvailabilityFormProps) {
         <div>
           <label
             htmlFor="startTime"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-[var(--foreground)] mb-1"
           >
             Start Time
           </label>
@@ -102,14 +102,14 @@ export function AvailabilityForm({ alumniId }: AvailabilityFormProps) {
             id="startTime"
             value={startTime}
             onChange={(e) => setStartTime(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full border border-[var(--card-border)] bg-[var(--surface-2)] text-[var(--foreground)] rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           />
         </div>
 
         <div>
           <label
             htmlFor="endTime"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-[var(--foreground)] mb-1"
           >
             End Time
           </label>
@@ -118,7 +118,7 @@ export function AvailabilityForm({ alumniId }: AvailabilityFormProps) {
             id="endTime"
             value={endTime}
             onChange={(e) => setEndTime(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full border border-[var(--card-border)] bg-[var(--surface-2)] text-[var(--foreground)] rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           />
         </div>
       </div>
