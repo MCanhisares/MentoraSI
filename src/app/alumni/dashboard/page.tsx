@@ -69,6 +69,14 @@ export default async function AlumniDashboardPage() {
           </Link>
           <div className="flex items-center gap-4">
             <span className="text-sm text-[var(--muted)]">{alumni.name || alumni.email}</span>
+            {alumni.is_admin && (
+              <Link
+                href="/alumni/admin"
+                className="px-2 py-1 text-xs font-medium bg-[var(--primary-500)]/20 text-[var(--primary-500)] rounded-full hover:bg-[var(--primary-500)]/30 transition-colors"
+              >
+                Admin
+              </Link>
+            )}
             <LogoutButton />
           </div>
         </div>
@@ -137,6 +145,23 @@ export default async function AlumniDashboardPage() {
                 Acessar Wiki
               </a>
             </div>
+
+            {alumni.is_admin && (
+              <div className="glass p-6 rounded-2xl border-[var(--primary-500)]/30 border">
+                <h2 className="text-lg font-semibold text-[var(--foreground)] mb-4 flex items-center gap-2">
+                  Administração
+                  <span className="px-2 py-0.5 text-xs font-medium bg-[var(--primary-500)]/20 text-[var(--primary-500)] rounded-full">
+                    Admin
+                  </span>
+                </h2>
+                <Link
+                  href="/alumni/admin"
+                  className="block w-full text-[var(--primary-500)] text-center px-4 py-3 rounded-xl font-medium border border-[var(--primary-500)] hover:bg-[var(--primary-500)]/10 transition-colors"
+                >
+                  Gerenciar Convites
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Upcoming Sessions */}

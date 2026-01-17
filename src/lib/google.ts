@@ -8,7 +8,7 @@ export function getOAuth2Client() {
   );
 }
 
-export function getAuthUrl() {
+export function getAuthUrl(inviteToken?: string) {
   const oauth2Client = getOAuth2Client();
 
   const scopes = [
@@ -18,11 +18,23 @@ export function getAuthUrl() {
     "https://www.googleapis.com/auth/calendar.events",
   ];
 
-  return oauth2Client.generateAuthUrl({
+  const authOptions: {
+    access_type: string;
+    scope: string[];
+    prompt: string;
+    state?: string;
+  } = {
     access_type: "offline",
     scope: scopes,
     prompt: "consent",
-  });
+  };
+
+  // Pass invite token through OAuth state parameter
+  if (inviteToken) {
+    authOptions.state = Buffer.from(JSON.stringify({ invite_token: inviteToken })).toString("base64");
+  }
+
+  return oauth2Client.generateAuthUrl(authOptions);
 }
 
 export async function getTokensFromCode(code: string) {

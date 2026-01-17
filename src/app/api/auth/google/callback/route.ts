@@ -6,6 +6,14 @@ interface AlumniRecord {
   id: string;
 }
 
+interface InviteTokenRecord {
+  id: string;
+  token: string;
+  used_by: string | null;
+  used_at: string | null;
+  expires_at: string | null;
+}
+
 const SESSION_COOKIE_NAME = "alumni_session";
 
 function getBaseUrl(request: NextRequest): string {
@@ -26,6 +34,7 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const code = searchParams.get("code");
   const error = searchParams.get("error");
+  const state = searchParams.get("state");
   const baseUrl = getBaseUrl(request);
 
   console.log("OAuth callback - baseUrl:", baseUrl);
@@ -37,6 +46,17 @@ export async function GET(request: NextRequest) {
 
   if (!code) {
     return NextResponse.redirect(new URL("/alumni/login?error=no_code", baseUrl));
+  }
+
+  // Parse invite token from state if present
+  let inviteToken: string | null = null;
+  if (state) {
+    try {
+      const stateData = JSON.parse(Buffer.from(state, "base64").toString());
+      inviteToken = stateData.invite_token || null;
+    } catch {
+      console.log("OAuth callback - could not parse state");
+    }
   }
 
   try {
@@ -65,8 +85,7 @@ export async function GET(request: NextRequest) {
     let alumniId: string;
 
     if (existingAlumni) {
-      // Update existing alumni with new tokens
-      // Only update refresh_token if a new one was provided (Google only sends it on first auth)
+      // Update existing alumni with new tokens - no invite token needed for existing users
       const updateData: Record<string, unknown> = {
         google_access_token: tokens.access_token,
         name: userInfo.name,
@@ -85,6 +104,36 @@ export async function GET(request: NextRequest) {
       alumniId = existingAlumni.id;
       console.log("OAuth callback - updated existing alumni:", alumniId);
     } else {
+      // New user - validate invite token is required
+      if (!inviteToken) {
+        console.log("OAuth callback - new user without invite token");
+        return NextResponse.redirect(new URL("/alumni/login?error=invite_required&needs_invite=true", baseUrl));
+      }
+
+      // Validate the invite token
+      const { data: tokenRecord } = await supabase
+        .from("invite_tokens")
+        .select("*")
+        .eq("token", inviteToken)
+        .single() as { data: InviteTokenRecord | null };
+
+      if (!tokenRecord) {
+        console.log("OAuth callback - invalid invite token");
+        return NextResponse.redirect(new URL("/alumni/login?error=invalid_invite&needs_invite=true", baseUrl));
+      }
+
+      // Check if token is already used
+      if (tokenRecord.used_by) {
+        console.log("OAuth callback - invite token already used");
+        return NextResponse.redirect(new URL("/alumni/login?error=invalid_invite&needs_invite=true", baseUrl));
+      }
+
+      // Check if token is expired
+      if (tokenRecord.expires_at && new Date(tokenRecord.expires_at) < new Date()) {
+        console.log("OAuth callback - invite token expired");
+        return NextResponse.redirect(new URL("/alumni/login?error=invalid_invite&needs_invite=true", baseUrl));
+      }
+
       // Create new alumni with a generated UUID
       const newId = crypto.randomUUID();
 
@@ -101,8 +150,17 @@ export async function GET(request: NextRequest) {
         throw insertError;
       }
 
+      // Mark the invite token as used
+      await supabase
+        .from("invite_tokens")
+        .update({
+          used_by: newId,
+          used_at: new Date().toISOString(),
+        })
+        .eq("id", tokenRecord.id);
+
       alumniId = newId;
-      console.log("OAuth callback - created new alumni:", alumniId);
+      console.log("OAuth callback - created new alumni with invite token:", alumniId);
     }
 
     // Create redirect response with session cookie

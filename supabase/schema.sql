@@ -12,6 +12,7 @@ CREATE TABLE alumni (
   google_access_token TEXT,
   google_refresh_token TEXT,
   google_calendar_id TEXT DEFAULT 'primary',
+  is_admin BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -51,7 +52,19 @@ CREATE TABLE sessions (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Invite tokens for mentor registration
+CREATE TABLE invite_tokens (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  token TEXT UNIQUE NOT NULL,
+  created_by UUID REFERENCES alumni(id), -- Admin who created the token
+  used_by UUID REFERENCES alumni(id), -- Alumni who used the token
+  used_at TIMESTAMPTZ,
+  expires_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Create indexes for performance
+CREATE INDEX idx_invite_tokens_token ON invite_tokens(token);
 CREATE INDEX idx_availability_alumni ON availability_slots(alumni_id);
 CREATE INDEX idx_availability_day ON availability_slots(day_of_week);
 CREATE INDEX idx_sessions_date ON sessions(session_date);
@@ -153,3 +166,26 @@ WHERE a.is_recurring = true
 -- Email verification migration:
 -- ALTER TABLE sessions ADD COLUMN verification_token TEXT UNIQUE;
 -- CREATE INDEX idx_sessions_verification_token ON sessions(verification_token);
+--
+-- Invite tokens migration:
+-- CREATE TABLE invite_tokens (
+--   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+--   token TEXT UNIQUE NOT NULL,
+--   created_by TEXT,
+--   used_by UUID REFERENCES alumni(id),
+--   used_at TIMESTAMPTZ,
+--   expires_at TIMESTAMPTZ,
+--   created_at TIMESTAMPTZ DEFAULT NOW()
+-- );
+-- CREATE INDEX idx_invite_tokens_token ON invite_tokens(token);
+--
+-- To create an invite token manually:
+-- INSERT INTO invite_tokens (token) VALUES ('your-secret-token-here');
+--
+-- Admin role migration:
+-- ALTER TABLE alumni ADD COLUMN is_admin BOOLEAN DEFAULT FALSE;
+-- ALTER TABLE invite_tokens ALTER COLUMN created_by TYPE UUID USING created_by::uuid;
+-- ALTER TABLE invite_tokens ADD CONSTRAINT invite_tokens_created_by_fkey FOREIGN KEY (created_by) REFERENCES alumni(id);
+--
+-- To make a user admin:
+-- UPDATE alumni SET is_admin = true WHERE email = 'admin@example.com';

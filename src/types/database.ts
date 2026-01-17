@@ -17,6 +17,7 @@ export interface Database {
           google_access_token: string | null;
           google_refresh_token: string | null;
           google_calendar_id: string | null;
+          is_admin: boolean;
           created_at: string;
           updated_at: string;
         };
@@ -27,6 +28,7 @@ export interface Database {
           google_access_token?: string | null;
           google_refresh_token?: string | null;
           google_calendar_id?: string | null;
+          is_admin?: boolean;
           created_at?: string;
           updated_at?: string;
         };
@@ -37,6 +39,7 @@ export interface Database {
           google_access_token?: string | null;
           google_refresh_token?: string | null;
           google_calendar_id?: string | null;
+          is_admin?: boolean;
           created_at?: string;
           updated_at?: string;
         };
@@ -150,4 +153,14 @@ export interface AvailableSlot {
   end_time: string;
   slot_id: string;
   alumni_id: string;
+}
+
+export interface InviteToken {
+  id: string;
+  token: string;
+  created_by: string | null;
+  used_by: string | null;
+  used_at: string | null;
+  expires_at: string | null;
+  created_at: string;
 }
