@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createCalendarEvent } from "@/lib/google";
 import {
   sendBookingConfirmationToStudent,
@@ -20,6 +21,8 @@ interface SessionRow {
   end_time: string;
   management_token: string | null;
   verification_token: string | null;
+  google_event_id?: string | null;
+  meeting_link?: string | null;
   status: string;
 }
 
@@ -42,7 +45,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabase = await createClient();
+    // Use admin client to bypass RLS for token-based access
+    const supabase = createAdminClient();
 
     // Find session by verification token
     const { data: session, error: sessionError } = await supabase
@@ -143,15 +147,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Update session: confirm status, clear verification token, add calendar info
-    const { error: updateError } = await supabase
+    const updateData: Partial<SessionRow> = {
+      status: "confirmed",
+      verification_token: null,
+      google_event_id: googleEventId || undefined,
+      meeting_link: meetingLink || undefined,
+    };
+
+    const { error: updateError } = (await supabase
       .from("sessions")
-      .update({
-        status: "confirmed",
-        verification_token: null,
-        google_event_id: googleEventId,
-        meeting_link: meetingLink,
-      })
-      .eq("id", session.id);
+      .update(updateData as never)
+      .eq("id", session.id)) as { error: unknown };
 
     if (updateError) {
       console.error("Failed to update session:", updateError);

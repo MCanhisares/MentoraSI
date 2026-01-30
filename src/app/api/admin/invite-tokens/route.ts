@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentAlumni } from "@/lib/auth";
 import { randomUUID } from "crypto";
 
@@ -34,6 +35,7 @@ export async function GET() {
       );
     }
 
+    // Use regular client - RLS policies enforce admin access
     const supabase = await createClient();
 
     // Get all invite tokens with creator and user info

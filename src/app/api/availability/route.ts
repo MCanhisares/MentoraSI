@@ -1,22 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
-
-const SESSION_COOKIE_NAME = "alumni_session";
-
-interface SlotOwnership {
-  alumni_id: string;
-}
+import { getCurrentAlumni } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
-  const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME);
+  const alumni = await getCurrentAlumni();
 
-  if (!sessionCookie?.value) {
+  if (!alumni) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const alumniId = sessionCookie.value;
   const supabase = await createClient();
 
   const formData = await request.formData();
@@ -29,18 +21,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Slot ID required" }, { status: 400 });
     }
 
-    // Verify ownership
-    const { data: slot } = await supabase
+    // RLS will enforce ownership - just delete
+    const { error } = await supabase
       .from("availability_slots")
-      .select("alumni_id")
-      .eq("id", slotId)
-      .single() as { data: SlotOwnership | null };
+      .delete()
+      .eq("id", slotId);
 
-    if (!slot || slot.alumni_id !== alumniId) {
+    if (error) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
-
-    await supabase.from("availability_slots").delete().eq("id", slotId);
 
     return NextResponse.redirect(
       new URL("/alumni/availability", request.url)
@@ -51,14 +40,12 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME);
+  const alumni = await getCurrentAlumni();
 
-  if (!sessionCookie?.value) {
+  if (!alumni) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const alumniId = sessionCookie.value;
   const supabase = await createClient();
 
   const slotId = request.nextUrl.searchParams.get("id");
@@ -67,17 +54,7 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: "Slot ID required" }, { status: 400 });
   }
 
-  // Verify ownership
-  const { data: slot } = await supabase
-    .from("availability_slots")
-    .select("alumni_id")
-    .eq("id", slotId)
-    .single() as { data: SlotOwnership | null };
-
-  if (!slot || slot.alumni_id !== alumniId) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
-  }
-
+  // RLS will enforce ownership - just delete
   const { error } = await supabase
     .from("availability_slots")
     .delete()

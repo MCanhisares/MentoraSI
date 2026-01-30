@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 interface SessionWithAlumni {
   id: string;
@@ -32,7 +33,8 @@ export async function GET(
       );
     }
 
-    const supabase = await createClient();
+    // Use admin client to bypass RLS for token-based access
+    const supabase = createAdminClient();
 
     const { data: session, error } = await supabase
       .from("sessions")

@@ -1,42 +1,29 @@
 import Link from "next/link";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
+import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
+import { getCurrentAlumni } from "@/lib/auth";
 import { format } from "date-fns";
 import { LogoutButton } from "@/components/LogoutButton";
-import type { Alumni, Session } from "@/types/database";
-
-const SESSION_COOKIE_NAME = "alumni_session";
+import { CalendarConnectBanner } from "@/components/CalendarConnectBanner";
+import type { Session } from "@/types/database";
 
 export default async function AlumniDashboardPage() {
-  const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME);
-
-  if (!sessionCookie?.value) {
-    redirect("/alumni/login");
-  }
-
-  const alumniId = sessionCookie.value;
-  const supabase = await createClient();
-
-  // Get alumni data
-  const { data: alumni } = await supabase
-    .from("alumni")
-    .select("*")
-    .eq("id", alumniId)
-    .single() as { data: Alumni | null };
+  const alumni = await getCurrentAlumni();
 
   if (!alumni) {
     redirect("/alumni/login");
   }
+
+  const supabase = await createClient();
 
   // Get upcoming sessions
   const today = format(new Date(), "yyyy-MM-dd");
   const { data: sessions } = await supabase
     .from("sessions")
     .select("*")
-    .eq("alumni_id", alumniId)
+    .eq("alumni_id", alumni.id)
     .gte("session_date", today)
     .eq("status", "confirmed")
     .order("session_date", { ascending: true })
@@ -46,7 +33,7 @@ export default async function AlumniDashboardPage() {
   const { count: slotsCount } = await supabase
     .from("availability_slots")
     .select("*", { count: "exact", head: true })
-    .eq("alumni_id", alumniId);
+    .eq("alumni_id", alumni.id);
 
   return (
     <main className="min-h-screen bg-[var(--background)] relative">
@@ -87,6 +74,13 @@ export default async function AlumniDashboardPage() {
           <h1 className="text-3xl font-bold text-[var(--foreground)] mb-2">Painel de Controle</h1>
           <p className="text-[var(--muted)]">Gerencie suas sessões de mentoria</p>
         </div>
+
+        {/* Calendar Connection Banner */}
+        {!alumni.google_refresh_token && (
+          <Suspense fallback={null}>
+            <CalendarConnectBanner />
+          </Suspense>
+        )}
 
         {/* Stats */}
         <div className="grid md:grid-cols-3 gap-4 mb-10">

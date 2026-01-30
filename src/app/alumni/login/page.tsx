@@ -17,7 +17,7 @@ function AlumniLoginContent() {
   const handleGoogleLogin = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/auth/google", {
+      const response = await fetch("/api/auth/supabase/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ invite_token: inviteToken || null }),
@@ -35,13 +35,18 @@ function AlumniLoginContent() {
   const getErrorMessage = () => {
     switch (error) {
       case "invalid_invite":
+      case "invalid_invite_token":
         return "Token de convite inválido ou expirado.";
       case "invite_required":
         return "Você precisa de um token de convite para criar uma conta.";
       case "access_denied":
         return "Acesso negado. Tente novamente.";
       case "auth_failed":
+      case "exchange_failed":
+      case "callback_failed":
         return "Falha na autenticação. Tente novamente.";
+      case "no_code":
+        return "Código de autenticação não recebido. Tente novamente.";
       default:
         return null;
     }

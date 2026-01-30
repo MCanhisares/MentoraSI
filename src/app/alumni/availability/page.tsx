@@ -1,41 +1,26 @@
 import Link from "next/link";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
+import { getCurrentAlumni } from "@/lib/auth";
 import { LogoutButton } from "@/components/LogoutButton";
 import { AvailabilityPageContent } from "@/components/AvailabilityPageContent";
-import type { Alumni, AvailabilitySlot } from "@/types/database";
-
-const SESSION_COOKIE_NAME = "alumni_session";
+import type { AvailabilitySlot } from "@/types/database";
 
 export default async function AvailabilityPage() {
-  const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME);
-
-  if (!sessionCookie?.value) {
-    redirect("/alumni/login");
-  }
-
-  const alumniId = sessionCookie.value;
-  const supabase = await createClient();
-
-  // Get alumni data
-  const { data: alumni } = await supabase
-    .from("alumni")
-    .select("*")
-    .eq("id", alumniId)
-    .single() as { data: Alumni | null };
+  const alumni = await getCurrentAlumni();
 
   if (!alumni) {
     redirect("/alumni/login");
   }
 
+  const supabase = await createClient();
+
   // Get existing availability slots - order by specific_date for individual, then day_of_week for recurring
   const { data: slots } = await supabase
     .from("availability_slots")
     .select("*")
-    .eq("alumni_id", alumniId)
+    .eq("alumni_id", alumni.id)
     .order("is_recurring", { ascending: false })
     .order("day_of_week", { ascending: true })
     .order("specific_date", { ascending: true }) as { data: AvailabilitySlot[] | null };
@@ -82,7 +67,7 @@ export default async function AvailabilityPage() {
           </p>
         </div>
 
-        <AvailabilityPageContent alumniId={alumniId} slots={slots} />
+        <AvailabilityPageContent alumniId={alumni.id} slots={slots} />
       </div>
     </main>
   );

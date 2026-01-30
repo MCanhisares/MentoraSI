@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { deleteCalendarEvent } from "@/lib/google";
 import { sendCancellationNotification } from "@/lib/email";
 import { format, parseISO } from "date-fns";
@@ -40,7 +41,8 @@ export async function POST(
       );
     }
 
-    const supabase = await createClient();
+    // Use admin client to bypass RLS for token-based access
+    const supabase = createAdminClient();
 
     // Fetch the session
     const { data: session, error: sessionError } = await supabase
@@ -90,14 +92,14 @@ export async function POST(
     }
 
     // Update session status
-    const { error: updateError } = await supabase
+    const { error: updateError } = (await supabase
       .from("sessions")
       .update({
         status: "cancelled",
         cancelled_at: new Date().toISOString(),
         cancellation_reason: reason || null,
-      })
-      .eq("id", id);
+      } as never)
+      .eq("id", id)) as { error: unknown };
 
     if (updateError) {
       console.error("Failed to update session:", updateError);

@@ -1,31 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
-import { createClient } from "@/lib/supabase/server";
+import { getCurrentAlumni } from "@/lib/auth";
 import { LogoutButton } from "@/components/LogoutButton";
 import { InviteTokensManager } from "@/components/InviteTokensManager";
-import type { Alumni } from "@/types/database";
-
-const SESSION_COOKIE_NAME = "alumni_session";
 
 export default async function AdminPage() {
-  const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME);
-
-  if (!sessionCookie?.value) {
-    redirect("/alumni/login");
-  }
-
-  const alumniId = sessionCookie.value;
-  const supabase = await createClient();
-
-  // Get alumni data
-  const { data: alumni } = await supabase
-    .from("alumni")
-    .select("*")
-    .eq("id", alumniId)
-    .single() as { data: Alumni | null };
+  const alumni = await getCurrentAlumni();
 
   if (!alumni) {
     redirect("/alumni/login");

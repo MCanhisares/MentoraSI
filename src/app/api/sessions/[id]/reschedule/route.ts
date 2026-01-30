@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { updateCalendarEvent } from "@/lib/google";
 import { sendRescheduleNotification } from "@/lib/email";
 import { format, parseISO } from "date-fns";
@@ -51,7 +52,8 @@ export async function POST(
       );
     }
 
-    const supabase = await createClient();
+    // Use admin client to bypass RLS for token-based access
+    const supabase = createAdminClient();
 
     // Fetch the original session
     const { data: session, error: sessionError } = await supabase
@@ -171,7 +173,7 @@ export async function POST(
     const oldEndTime = session.end_time;
 
     // Update the existing session (same ID, same management token)
-    const { error: updateError } = await supabase
+    const { error: updateError } = (await supabase
       .from("sessions")
       .update({
         slot_id: new_slot_id,
@@ -179,8 +181,8 @@ export async function POST(
         start_time: new_start_time,
         end_time: new_end_time,
         meeting_link: meetingLink,
-      })
-      .eq("id", id);
+      } as never)
+      .eq("id", id)) as { error: unknown };
 
     if (updateError) {
       console.error("Failed to update session:", updateError);
