@@ -14,6 +14,7 @@ export interface Database {
           id: string;
           email: string;
           name: string;
+          auth_user_id: string | null;
           google_access_token: string | null;
           google_refresh_token: string | null;
           google_calendar_id: string | null;
@@ -25,6 +26,7 @@ export interface Database {
           id?: string;
           email: string;
           name: string;
+          auth_user_id?: string | null;
           google_access_token?: string | null;
           google_refresh_token?: string | null;
           google_calendar_id?: string | null;
@@ -36,6 +38,7 @@ export interface Database {
           id?: string;
           email?: string;
           name?: string;
+          auth_user_id?: string | null;
           google_access_token?: string | null;
           google_refresh_token?: string | null;
           google_calendar_id?: string | null;
@@ -135,6 +138,35 @@ export interface Database {
           status?: "pending" | "confirmed" | "cancelled" | "completed";
           cancelled_at?: string | null;
           cancellation_reason?: string | null;
+          created_at?: string;
+        };
+      };
+      invite_tokens: {
+        Row: {
+          id: string;
+          token: string;
+          created_by: string | null;
+          used_by: string | null;
+          used_at: string | null;
+          expires_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          token: string;
+          created_by?: string | null;
+          used_by?: string | null;
+          used_at?: string | null;
+          expires_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          token?: string;
+          created_by?: string | null;
+          used_by?: string | null;
+          used_at?: string | null;
+          expires_at?: string | null;
           created_at?: string;
         };
       };
