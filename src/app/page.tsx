@@ -10,23 +10,17 @@ const mentors = [
     role: "Software Engineer Manager @ Questrade",
   },
   {
-    name: "Bruno Murozaki",
-    linkedin: "https://www.linkedin.com/in/brunomurozaki/",
-    photo: "https://media.licdn.com/dms/image/v2/D4D03AQEVMDWqE6fQLQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1683655665695?e=2147483647&v=beta&t=XbpsgnQB8dRJUONbPzhi1zkWhEWE3j9gnZeJURkvFxk",
-    role: "Software Engineer @ Magie",
+    name: "Débora Atanes Buss",
+    linkedin: "https://www.linkedin.com/in/deboraatanes/",
+    photo: "https://media.licdn.com/dms/image/v2/C4D03AQFeqBnYWdgoOg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1622672883458?e=1771459200&v=beta&t=ykO1fT1oRMr8Qrd4E_xOC0otVfnPvqG_TQjsaGnecb8",
+    role: "Principal Software Engineer | Tech Manager @ Tupinambá",
   },
   {
     name: "Luis Cervera",
     linkedin: "https://www.linkedin.com/in/lcervera94/",
     photo: "https://media.licdn.com/dms/image/v2/D4D03AQE7_WCiT1jsgQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1706579650042?e=1770249600&v=beta&t=UMeF28mkyeDNZ66dLNNWOTpx1qkrfvUyeHimFb6ZduE",
     role: "Associate Director @ Credit Suisse Brasil",
-  },
-  {
-    name: "Abel Rocha Espinosa",
-    linkedin: "https://www.linkedin.com/in/abel-rocha-espinosa/",
-    photo: "https://media.licdn.com/dms/image/v2/D5603AQH_0S_0SYe4ag/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1707775982518?e=1770249600&v=beta&t=I1dnt4bt43yosHQiemlj3C-P7h0ewXGEgJI0zzub_EY",
-    role: "Software Engineer @ Cayena",
-  },
+  }
 ];
 
 function getInitials(name: string) {
@@ -272,7 +266,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
           {mentors.map((mentor) => (
             <a
               key={mentor.linkedin}

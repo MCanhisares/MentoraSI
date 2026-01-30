@@ -1,5 +1,1 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-echo "🔍 Running TypeScript type checks before push..."
 npm run type-check
