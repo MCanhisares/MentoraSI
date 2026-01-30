@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import type { Alumni } from "@/types/database";
 
 const SESSION_COOKIE_NAME = "alumni_session";
 
@@ -28,7 +29,7 @@ export async function clearSession() {
   cookieStore.delete(SESSION_COOKIE_NAME);
 }
 
-export async function getCurrentAlumni() {
+export async function getCurrentAlumni(): Promise<Alumni | null> {
   // Try Supabase Auth first
   const supabase = await createClient();
   const { data: { user }, error: authError } = await supabase.auth.getUser();

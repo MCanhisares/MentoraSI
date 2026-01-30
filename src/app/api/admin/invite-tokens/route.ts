@@ -103,6 +103,7 @@ export async function POST(request: NextRequest) {
 
     const { data: newToken, error } = await supabase
       .from("invite_tokens")
+      // @ts-expect-error - Database types not properly inferred
       .insert({
         token,
         created_by: alumni.id,

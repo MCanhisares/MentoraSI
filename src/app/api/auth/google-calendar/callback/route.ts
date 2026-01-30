@@ -72,6 +72,7 @@ export async function GET(request: NextRequest) {
 
     const { error: updateError } = await supabase
       .from("alumni")
+      // @ts-expect-error - Database types not properly inferred
       .update(updateData)
       .eq("id", alumni.id);
 
