@@ -1,5 +1,5 @@
 import { Header } from "@/components/Header";
-import Image from "next/image";
+import MentorsMarquee from "@/components/MentorsMarquee";
 import Link from "next/link";
 
 const mentors = [
@@ -20,7 +20,13 @@ const mentors = [
     linkedin: "https://www.linkedin.com/in/lcervera94/",
     photo: "https://media.licdn.com/dms/image/v2/D4D03AQE7_WCiT1jsgQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1706579650042?e=1770249600&v=beta&t=UMeF28mkyeDNZ66dLNNWOTpx1qkrfvUyeHimFb6ZduE",
     role: "Associate Director @ Credit Suisse Brasil",
-  }
+  },
+  {
+    name: "Felipe Castro",
+    linkedin: "https://www.linkedin.com/in/leddo/",
+    photo: "https://media.licdn.com/dms/image/v2/D4D03AQEgkIf_oX8zcg/profile-displayphoto-crop_800_800/B4DZkGu7OSH0AI-/0/1756754589325?e=1771459200&v=beta&t=h7Jy23DekbZrvstREMB7_fbO6we73bAN90hE2UZEwXI",
+    role: "Senior Frontend Developer @ Entourage Yearbooks",
+  },
 ];
 
 function getInitials(name: string) {
@@ -266,43 +272,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-          {mentors.map((mentor) => (
-            <a
-              key={mentor.linkedin}
-              href={mentor.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="glass p-6 rounded-2xl text-center group hover:border-[var(--primary-500)] transition-all hover:scale-105"
-            >
-              <div className="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden bg-gradient-to-br from-[var(--primary-500)] to-[var(--primary-600)] flex items-center justify-center">
-                {mentor.photo ? (
-                  <Image
-                    src={mentor.photo}
-                    alt={mentor.name}
-                    width={80}
-                    height={80}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <span className="text-white text-xl font-semibold">
-                    {getInitials(mentor.name)}
-                  </span>
-                )}
-              </div>
-              <h3 className="font-semibold text-[var(--foreground)] mb-1 group-hover:text-[var(--primary-500)] transition-colors">
-                {mentor.name}
-              </h3>
-              <p className="text-xs text-[var(--muted)]">{mentor.role}</p>
-              <div className="mt-3 flex items-center justify-center gap-1 text-xs text-[var(--primary-500)]">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                </svg>
-                <span>LinkedIn</span>
-              </div>
-            </a>
-          ))}
-        </div>
+        <MentorsMarquee mentors={mentors} />
       </div>
 
       {/* Footer */}
