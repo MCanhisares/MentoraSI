@@ -27,6 +27,12 @@ const mentors = [
     photo: "https://media.licdn.com/dms/image/v2/D4D03AQEgkIf_oX8zcg/profile-displayphoto-crop_800_800/B4DZkGu7OSH0AI-/0/1756754589325?e=1771459200&v=beta&t=h7Jy23DekbZrvstREMB7_fbO6we73bAN90hE2UZEwXI",
     role: "Senior Frontend Developer @ Entourage Yearbooks",
   },
+  {
+    name: "Yann Righas Abrahão",
+    linkedin: "https://www.linkedin.com/in/yann-righas-abrahao/",
+    photo: "https://media.licdn.com/dms/image/v2/D4D03AQFxFrVjeIL3oQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1636929416883?e=1772064000&v=beta&t=4fIUN78B_76JQ2p_pYgfz7Mn6lbFleDPc7EKweGz1as",
+    role: "Cientista de Dados @ Shopee",
+  }
 ];
 
 function getInitials(name: string) {
